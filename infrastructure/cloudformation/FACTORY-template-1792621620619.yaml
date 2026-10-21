@@ -1,0 +1,2172 @@
+---
+Outputs:
+  CustomActionFunction:
+    Value:
+      Ref: "CustomActionLambda"
+  LogBucket:
+    Value:
+      Ref: "ExistingBucketName"
+  LogBucketPath:
+    Value:
+      Fn::Sub: "s3://${ExistingBucketName}/${ExistingPrefix}/"
+  StopDeviceFunction:
+    Value:
+      Ref: "StopDeviceLambda"
+  StopAllFunction:
+    Value:
+      Ref: "StopAllLambda"
+  LoggingRule:
+    Value:
+      Ref: "MqttLoggingRule"
+Metadata:
+  AWSToolsMetrics:
+    IaC_Generator: "arn:aws:cloudformation:us-east-2:041517176862:generatedTemplate/8be1d143-bef9-4ea6-8450-9d1c86f66be0"
+Description: "Three manually invoked MQTT command Lambdas and S3 message logging.\n"
+Parameters:
+  LambdaFunctionLambdaGoldAggregatorCodeZipFileNCKdq:
+    NoEcho: "true"
+    Type: "String"
+    Description: "(Node.js and Python) The source code of your Lambda function. If\
+      \ you include your function source inline with this parameter, CFN places it\
+      \ in a file named ``index`` and zips it to create a [deployment package](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html).\
+      \ This zip file cannot exceed 4MB. For the ``Handler`` property, the first part\
+      \ of the handler identifier must be ``index``. For example, ``index.handler``.\n\
+      \  When you specify source code inline for a Node.js function, the ``index``\
+      \ file that CFN creates uses the extension ``.js``. This means that Node.js\
+      \ treats the file as a CommonJS module.\n When using Node.js 24 or later, Node.js\
+      \ can automatically detect if a ``.js`` file should be treated as CommonJS or\
+      \ as an ES module. To enable auto-detection, add the ``--experimental-detect-module``\
+      \ flag to the ``NODE_OPTIONS`` environment variable. For more information, see\
+      \ [Experimental Node.js features](https://docs.aws.amazon.com//lambda/latest/dg/lambda-nodejs.html#nodejs-experimental-features).\n\
+      \   For JSON, you must escape quotes and special characters such as newline\
+      \ (``\\n``) with a backslash.\n If you specify a function that interacts with\
+      \ an AWS CloudFormation custom resource, you don't have to write your own functions\
+      \ to send responses to the custom resource that invoked the function. AWS CloudFormation\
+      \ provides a response module ([cfn-response](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html))\
+      \ that simplifies sending responses. See [Using Lambda with CloudFormation](https://docs.aws.amazon.com/lambda/latest/dg/services-cloudformation.html)\
+      \ for details."
+  LambdaFunctionLambdaGoldAggregator1CodeSourceKMSKeyArnfq2ka:
+    NoEcho: "true"
+    Type: "String"
+    Description: "The ARN of the KMSlong (KMS) customer managed key that's used to\
+      \ encrypt your function's .zip deployment package. If you don't provide a customer\
+      \ managed key, Lambda uses an [owned key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk)."
+  LambdaFunctionLambdaSilverProcessorCodeS3KeyUs62g:
+    NoEcho: "true"
+    Type: "String"
+    Description: "The Amazon S3 key of the deployment package."
+  LambdaFunctionSilvertestCodeZipFileuQjS7:
+    NoEcho: "true"
+    Type: "String"
+    Description: "(Node.js and Python) The source code of your Lambda function. If\
+      \ you include your function source inline with this parameter, CFN places it\
+      \ in a file named ``index`` and zips it to create a [deployment package](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html).\
+      \ This zip file cannot exceed 4MB. For the ``Handler`` property, the first part\
+      \ of the handler identifier must be ``index``. For example, ``index.handler``.\n\
+      \  When you specify source code inline for a Node.js function, the ``index``\
+      \ file that CFN creates uses the extension ``.js``. This means that Node.js\
+      \ treats the file as a CommonJS module.\n When using Node.js 24 or later, Node.js\
+      \ can automatically detect if a ``.js`` file should be treated as CommonJS or\
+      \ as an ES module. To enable auto-detection, add the ``--experimental-detect-module``\
+      \ flag to the ``NODE_OPTIONS`` environment variable. For more information, see\
+      \ [Experimental Node.js features](https://docs.aws.amazon.com//lambda/latest/dg/lambda-nodejs.html#nodejs-experimental-features).\n\
+      \   For JSON, you must escape quotes and special characters such as newline\
+      \ (``\\n``) with a backslash.\n If you specify a function that interacts with\
+      \ an AWS CloudFormation custom resource, you don't have to write your own functions\
+      \ to send responses to the custom resource that invoked the function. AWS CloudFormation\
+      \ provides a response module ([cfn-response](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html))\
+      \ that simplifies sending responses. See [Using Lambda with CloudFormation](https://docs.aws.amazon.com/lambda/latest/dg/services-cloudformation.html)\
+      \ for details."
+  ExistingTopic:
+    Type: "String"
+    Description: "Existing MQTT topic name, without leading slash"
+  LambdaFunctionLambdaGoldAggregator1CodeS3ObjectStorageModeIxq4g:
+    NoEcho: "true"
+    Type: "String"
+    Description: "Specifies the storage mode for the deployment package. Use ``COPY``\
+      \ to store the package in LAMlong-managed storage. Use ``REFERENCE`` to read\
+      \ the package directly from the Amazon S3 bucket. If omitted, the default is\
+      \ ``COPY``.Possible values: [COPY, REFERENCE]\nThis property can be replaced\
+      \ with other types"
+  LambdaFunctionSilvertestCodeS3ObjectStorageModeJL817:
+    NoEcho: "true"
+    Type: "String"
+    Description: "Specifies the storage mode for the deployment package. Use ``COPY``\
+      \ to store the package in LAMlong-managed storage. Use ``REFERENCE`` to read\
+      \ the package directly from the Amazon S3 bucket. If omitted, the default is\
+      \ ``COPY``.Possible values: [COPY, REFERENCE]\nThis property can be replaced\
+      \ with other types"
+  LambdaFunctionLambdaGoldAggregatorCodeS3ObjectVersionsp2hR:
+    NoEcho: "true"
+    Type: "String"
+    Description: "For versioned objects, the version of the deployment package object\
+      \ to use."
+  LambdaFunctionLambdaSilverProcessorCodeS3ObjectStorageModenpar9:
+    NoEcho: "true"
+    Type: "String"
+    Description: "Specifies the storage mode for the deployment package. Use ``COPY``\
+      \ to store the package in LAMlong-managed storage. Use ``REFERENCE`` to read\
+      \ the package directly from the Amazon S3 bucket. If omitted, the default is\
+      \ ``COPY``.Possible values: [COPY, REFERENCE]\nThis property can be replaced\
+      \ with other types"
+  LambdaFunctionLambdaGoldAggregatorCodeS3BucketeQFIb:
+    NoEcho: "true"
+    Type: "String"
+    Description: "An Amazon S3 bucket in the same AWS-Region as your function. The\
+      \ bucket can be in a different AWS-account."
+  LambdaFunctionLambdaGoldAggregator1CodeZipFile0l4Of:
+    NoEcho: "true"
+    Type: "String"
+    Description: "(Node.js and Python) The source code of your Lambda function. If\
+      \ you include your function source inline with this parameter, CFN places it\
+      \ in a file named ``index`` and zips it to create a [deployment package](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html).\
+      \ This zip file cannot exceed 4MB. For the ``Handler`` property, the first part\
+      \ of the handler identifier must be ``index``. For example, ``index.handler``.\n\
+      \  When you specify source code inline for a Node.js function, the ``index``\
+      \ file that CFN creates uses the extension ``.js``. This means that Node.js\
+      \ treats the file as a CommonJS module.\n When using Node.js 24 or later, Node.js\
+      \ can automatically detect if a ``.js`` file should be treated as CommonJS or\
+      \ as an ES module. To enable auto-detection, add the ``--experimental-detect-module``\
+      \ flag to the ``NODE_OPTIONS`` environment variable. For more information, see\
+      \ [Experimental Node.js features](https://docs.aws.amazon.com//lambda/latest/dg/lambda-nodejs.html#nodejs-experimental-features).\n\
+      \   For JSON, you must escape quotes and special characters such as newline\
+      \ (``\\n``) with a backslash.\n If you specify a function that interacts with\
+      \ an AWS CloudFormation custom resource, you don't have to write your own functions\
+      \ to send responses to the custom resource that invoked the function. AWS CloudFormation\
+      \ provides a response module ([cfn-response](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html))\
+      \ that simplifies sending responses. See [Using Lambda with CloudFormation](https://docs.aws.amazon.com/lambda/latest/dg/services-cloudformation.html)\
+      \ for details."
+  LambdaFunctionLambdaGoldAggregatorCodeImageUri7Njny:
+    NoEcho: "true"
+    Type: "String"
+    Description: "URI of a [container image](https://docs.aws.amazon.com/lambda/latest/dg/lambda-images.html)\
+      \ in the Amazon ECR registry."
+  LambdaFunctionSilvertestCodeS3Key1PgdA:
+    NoEcho: "true"
+    Type: "String"
+    Description: "The Amazon S3 key of the deployment package."
+  LambdaFunctionLambdaSilverProcessorCodeS3BucketJxmTF:
+    NoEcho: "true"
+    Type: "String"
+    Description: "An Amazon S3 bucket in the same AWS-Region as your function. The\
+      \ bucket can be in a different AWS-account."
+  ThingName:
+    Type: "String"
+    Description: "Existing AWS IoT Thing name"
+  LambdaFunctionLambdaSilverProcessorCodeImageUriJUcxd:
+    NoEcho: "true"
+    Type: "String"
+    Description: "URI of a [container image](https://docs.aws.amazon.com/lambda/latest/dg/lambda-images.html)\
+      \ in the Amazon ECR registry."
+  ExistingPrefix:
+    Default: "fabrica-data-lake-gold-salvador/gold/Operational_actions"
+    Type: "String"
+  LambdaFunctionSilvertestCodeS3BucketjLvVG:
+    NoEcho: "true"
+    Type: "String"
+    Description: "An Amazon S3 bucket in the same AWS-Region as your function. The\
+      \ bucket can be in a different AWS-account."
+  LambdaFunctionLambdaSilverProcessorCodeS3ObjectVersionJVlqK:
+    NoEcho: "true"
+    Type: "String"
+    Description: "For versioned objects, the version of the deployment package object\
+      \ to use."
+  IoTDataEndpoint:
+    Type: "String"
+    Description: "IoT Data endpoint hostname, e.g. abc123-ats.iot.us-east-1.amazonaws.com\n"
+  LambdaFunctionLambdaGoldAggregator1CodeS3ObjectVersion8PLyn:
+    NoEcho: "true"
+    Type: "String"
+    Description: "For versioned objects, the version of the deployment package object\
+      \ to use."
+  LambdaFunctionLambdaGoldAggregator1CodeS3Keyq66sZ:
+    NoEcho: "true"
+    Type: "String"
+    Description: "The Amazon S3 key of the deployment package."
+  LambdaFunctionLambdaGoldAggregatorCodeS3ObjectStorageModeV1xKh:
+    NoEcho: "true"
+    Type: "String"
+    Description: "Specifies the storage mode for the deployment package. Use ``COPY``\
+      \ to store the package in LAMlong-managed storage. Use ``REFERENCE`` to read\
+      \ the package directly from the Amazon S3 bucket. If omitted, the default is\
+      \ ``COPY``.Possible values: [COPY, REFERENCE]\nThis property can be replaced\
+      \ with other types"
+  LambdaFunctionSilvertestCodeSourceKMSKeyArneKEkG:
+    NoEcho: "true"
+    Type: "String"
+    Description: "The ARN of the KMSlong (KMS) customer managed key that's used to\
+      \ encrypt your function's .zip deployment package. If you don't provide a customer\
+      \ managed key, Lambda uses an [owned key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk)."
+  LambdaFunctionLambdaGoldAggregatorCodeS3KeyjHwJj:
+    NoEcho: "true"
+    Type: "String"
+    Description: "The Amazon S3 key of the deployment package."
+  LambdaFunctionLambdaGoldAggregator1CodeS3BucketIDCSv:
+    NoEcho: "true"
+    Type: "String"
+    Description: "An Amazon S3 bucket in the same AWS-Region as your function. The\
+      \ bucket can be in a different AWS-account."
+  LambdaFunctionLambdaGoldAggregator1CodeImageUriZ5XEi:
+    NoEcho: "true"
+    Type: "String"
+    Description: "URI of a [container image](https://docs.aws.amazon.com/lambda/latest/dg/lambda-images.html)\
+      \ in the Amazon ECR registry."
+  ExistingBucketName:
+    Default: "sistemasciberfisicos"
+    Type: "String"
+  LambdaFunctionLambdaSilverProcessorCodeZipFileqCWwf:
+    NoEcho: "true"
+    Type: "String"
+    Description: "(Node.js and Python) The source code of your Lambda function. If\
+      \ you include your function source inline with this parameter, CFN places it\
+      \ in a file named ``index`` and zips it to create a [deployment package](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html).\
+      \ This zip file cannot exceed 4MB. For the ``Handler`` property, the first part\
+      \ of the handler identifier must be ``index``. For example, ``index.handler``.\n\
+      \  When you specify source code inline for a Node.js function, the ``index``\
+      \ file that CFN creates uses the extension ``.js``. This means that Node.js\
+      \ treats the file as a CommonJS module.\n When using Node.js 24 or later, Node.js\
+      \ can automatically detect if a ``.js`` file should be treated as CommonJS or\
+      \ as an ES module. To enable auto-detection, add the ``--experimental-detect-module``\
+      \ flag to the ``NODE_OPTIONS`` environment variable. For more information, see\
+      \ [Experimental Node.js features](https://docs.aws.amazon.com//lambda/latest/dg/lambda-nodejs.html#nodejs-experimental-features).\n\
+      \   For JSON, you must escape quotes and special characters such as newline\
+      \ (``\\n``) with a backslash.\n If you specify a function that interacts with\
+      \ an AWS CloudFormation custom resource, you don't have to write your own functions\
+      \ to send responses to the custom resource that invoked the function. AWS CloudFormation\
+      \ provides a response module ([cfn-response](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html))\
+      \ that simplifies sending responses. See [Using Lambda with CloudFormation](https://docs.aws.amazon.com/lambda/latest/dg/services-cloudformation.html)\
+      \ for details."
+  LambdaFunctionLambdaSilverProcessorCodeSourceKMSKeyArnkzcru:
+    NoEcho: "true"
+    Type: "String"
+    Description: "The ARN of the KMSlong (KMS) customer managed key that's used to\
+      \ encrypt your function's .zip deployment package. If you don't provide a customer\
+      \ managed key, Lambda uses an [owned key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk)."
+  LambdaFunctionSilvertestCodeImageUri9qzDA:
+    NoEcho: "true"
+    Type: "String"
+    Description: "URI of a [container image](https://docs.aws.amazon.com/lambda/latest/dg/lambda-images.html)\
+      \ in the Amazon ECR registry."
+  LambdaFunctionSilvertestCodeS3ObjectVersion1nhzt:
+    NoEcho: "true"
+    Type: "String"
+    Description: "For versioned objects, the version of the deployment package object\
+      \ to use."
+  LambdaFunctionLambdaGoldAggregatorCodeSourceKMSKeyArnqicOc:
+    NoEcho: "true"
+    Type: "String"
+    Description: "The ARN of the KMSlong (KMS) customer managed key that's used to\
+      \ encrypt your function's .zip deployment package. If you don't provide a customer\
+      \ managed key, Lambda uses an [owned key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk)."
+Resources:
+  LogsLogStream20261017LATEST12429c7195604d8cb68c78b08138fe3f:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/17/[$LATEST]12429c7195604d8cb68c78b08138fe3f"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator1"
+  LogsLogStream20261021LATESTdb173bc176cd4da4bee404256e2411fa:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/21/[$LATEST]db173bc176cd4da4bee404256e2411fa"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IAMManagedPolicyPolicyserviceroleawsiotruleIngestIoTRuleaction1roleIoTRuleS3AccessRole:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "aws-iot-rule-IngestIoTRule-action-1-role-IoTRuleS3AccessRole"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Resource: "arn:aws:s3:::sistemasciberfisicos/fabrica-data-lake-bronze-salvador/*"
+          Action: "s3:PutObject"
+          Effect: "Allow"
+      Roles: []
+      Users: []
+  LogsLogStream20260926LATEST9570d84d68464ebb99888605177263b2:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/26/[$LATEST]9570d84d68464ebb99888605177263b2"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogGroupawslambdaiotparoindividual:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogGroup"
+    DeletionPolicy: "Retain"
+    Properties:
+      FieldIndexPolicies: []
+      LogGroupClass: "STANDARD"
+      LogGroupName: "/aws/lambda/iot-paro-individual"
+      BearerTokenAuthenticationEnabled: false
+      DeletionProtectionEnabled: false
+      DataProtectionPolicy: {}
+  LogsLogStream20260926LATESTb564b918492642aa8917ee2400507062:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/26/[$LATEST]b564b918492642aa8917ee2400507062"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20260913LATEST37c97ee614394c8d890328c379bda1ce:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]37c97ee614394c8d890328c379bda1ce"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator"
+  LogsLogStream20260918LATESTc56bbc5a17b74aaf893a993913a2589a:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/18/[$LATEST]c56bbc5a17b74aaf893a993913a2589a"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IoTThingDevicesimulator:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IoT::Thing"
+    DeletionPolicy: "Retain"
+    Properties:
+      AttributePayload: {}
+      ThingName: "device_simulator"
+  LogsLogStream20260926LATESTc3a0ea6384fc4193bb7960101ad03ea9:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/26/[$LATEST]c3a0ea6384fc4193bb7960101ad03ea9"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IoTTopicRuleIngestIoTRule:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IoT::TopicRule"
+    DeletionPolicy: "Retain"
+    Properties:
+      RuleName: "IngestIoTRule"
+      Tags: []
+      TopicRulePayload:
+        RuleDisabled: false
+        Description: "Rule that publish the topic on s3"
+        AwsIotSqlVersion: "2016-03-23"
+        Actions:
+        - S3:
+            BucketName: "sistemasciberfisicos"
+            CannedAcl: "private"
+            Key: "fabrica-data-lake-bronze-salvador/raw/${topic()}/${timestamp()}.json"
+            RoleArn: "arn:aws:iam::041517176862:role/service-role/IoTRuleS3AccessRole"
+        - Lambda:
+            FunctionArn: "arn:aws:lambda:us-east-2:041517176862:function:Lambda_Silver_Processor"
+        Sql: "SELECT * FROM 'fabrica/maquinas/telemetria'"
+  LogsLogGroupawslambdaLambdaGoldAggregator:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogGroup"
+    DeletionPolicy: "Retain"
+    Properties:
+      FieldIndexPolicies: []
+      LogGroupClass: "STANDARD"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator"
+      BearerTokenAuthenticationEnabled: false
+      DeletionProtectionEnabled: false
+      DataProtectionPolicy: {}
+  LogsLogStream20260913LATESTabaa955a4e2a4b9996a724be39114264:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]abaa955a4e2a4b9996a724be39114264"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20261015LATESTc9d2ba5550b04946ac379300c8f7f7c2:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/15/[$LATEST]c9d2ba5550b04946ac379300c8f7f7c2"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator"
+  IAMManagedPolicyPolicyserviceroleAWSLambdaBasicExecutionRole41a3535ef5724418ba08d403b25cd2e0:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "AWSLambdaBasicExecutionRole-41a3535e-f572-4418-ba08-d403b25cd2e0"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:logs:us-east-1:041517176862:*"
+          Action: "logs:CreateLogGroup"
+          Effect: "Allow"
+        - Resource:
+          - "arn:aws:logs:us-east-1:041517176862:log-group:/aws/lambda/Lambda_Silver_Processor:*"
+          Action:
+          - "logs:CreateLogStream"
+          - "logs:PutLogEvents"
+          Effect: "Allow"
+      Roles:
+      - "Lambda_Silver_Processor-role-c5ppxw2k"
+      Users: []
+  IAMManagedPolicyPolicyserviceroleAWSLambdaBasicExecutionRolefc91962903654e3ea45aa7e603b028f1:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "AWSLambdaBasicExecutionRole-fc919629-0365-4e3e-a45a-a7e603b028f1"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:logs:us-east-2:041517176862:*"
+          Action: "logs:CreateLogGroup"
+          Effect: "Allow"
+        - Resource:
+          - "arn:aws:logs:us-east-2:041517176862:log-group:/aws/lambda/Lambda_Gold_Aggregator:*"
+          Action:
+          - "logs:CreateLogStream"
+          - "logs:PutLogEvents"
+          Effect: "Allow"
+      Roles:
+      - "Lambda_Gold_Aggregator-role-jvikvc1m"
+      Users: []
+  IoTThingSensorsim:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IoT::Thing"
+    DeletionPolicy: "Retain"
+    Properties:
+      AttributePayload: {}
+      ThingName: "Sensor_sim"
+  LogsLogStream20260913LATEST0cf22cca113942de9a8e1b8e490b7832:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]0cf22cca113942de9a8e1b8e490b7832"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20260913LATESTe9fc711f04974a6b84bc4d449fd120fa:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]e9fc711f04974a6b84bc4d449fd120fa"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IoTPolicy:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IoT::Policy"
+    DeletionPolicy: "Retain"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:iot:us-east-2:041517176862:client/Sensor_Planta_Principal"
+          Action: "iot:Connect"
+          Effect: "Allow"
+        - Resource: "arn:aws:iot:us-east-2:041517176862:topic/fabrica/maquinas/telemetria"
+          Action: "iot:Publish"
+          Effect: "Allow"
+        - Resource: "arn:aws:iot:us-east-2:041517176862:topic/fabrica/maquinas/telemetria"
+          Action: "iot:Receive"
+          Effect: "Allow"
+        - Resource: "arn:aws:iot:us-east-2:041517176862:topicfilter/fabrica/maquinas/telemetria"
+          Action: "iot:Subscribe"
+          Effect: "Allow"
+        - Resource: "arn:aws:iot:us-east-2:041517176862:topic/fabrica/maquinas/telemetria/ack"
+          Action: "iot:Publish"
+          Effect: "Allow"
+      Tags: []
+      PolicyName: "IoT_device"
+  LogsLogStream20260926LATESTbe6c28d4ac60439ba69a83af95ca1a5b:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/26/[$LATEST]be6c28d4ac60439ba69a83af95ca1a5b"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  DynamoDBTableMaquinasTelemetriaSilver:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::DynamoDB::Table"
+    DeletionPolicy: "Retain"
+    Properties:
+      SSESpecification:
+        SSEEnabled: false
+      TableName: "MaquinasTelemetriaSilver"
+      AttributeDefinitions:
+      - AttributeType: "S"
+        AttributeName: "device_id"
+      - AttributeType: "S"
+        AttributeName: "timestamp"
+      ContributorInsightsSpecification:
+        Enabled: false
+      BillingMode: "PAY_PER_REQUEST"
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      WarmThroughput:
+        ReadUnitsPerSecond: 12000
+        WriteUnitsPerSecond: 4000
+      KeySchema:
+      - KeyType: "HASH"
+        AttributeName: "device_id"
+      - KeyType: "RANGE"
+        AttributeName: "timestamp"
+      DeletionProtectionEnabled: false
+      TableClass: "STANDARD"
+      Tags: []
+      TimeToLiveSpecification:
+        Enabled: false
+  LogsLogStream20260919LATESTb32c19ef8f5b4707bde931b5894ff552:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/19/[$LATEST]b32c19ef8f5b4707bde931b5894ff552"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IAMManagedPolicyPolicyserviceroleAWSLambdaBasicExecutionRole41835ebf54f6424b8c6c186bafcc305f:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "AWSLambdaBasicExecutionRole-41835ebf-54f6-424b-8c6c-186bafcc305f"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:logs:us-east-1:041517176862:*"
+          Action: "logs:CreateLogGroup"
+          Effect: "Allow"
+        - Resource:
+          - "arn:aws:logs:us-east-1:041517176862:log-group:/aws/lambda/function2:*"
+          Action:
+          - "logs:CreateLogStream"
+          - "logs:PutLogEvents"
+          Effect: "Allow"
+      Roles:
+      - "function2-role-2wal6nfp"
+      Users: []
+  LogsLogGroupawslambdaLambdaGoldAggregator1:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogGroup"
+    DeletionPolicy: "Retain"
+    Properties:
+      FieldIndexPolicies: []
+      LogGroupClass: "STANDARD"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator1"
+      BearerTokenAuthenticationEnabled: false
+      DeletionProtectionEnabled: false
+      DataProtectionPolicy: {}
+  StopAllLambda:
+    Properties:
+      Role:
+        Fn::GetAtt: "MqttLambdaRole.Arn"
+      FunctionName: "iot_paro_total"
+      Runtime: "python3.12"
+      Timeout: 10
+      Handler: "index.handler"
+      Environment:
+        Variables:
+          IOT_ENDPOINT:
+            Ref: "IoTDataEndpoint"
+          MQTT_TOPIC:
+            Ref: "ExistingTopic"
+          THING_NAME:
+            Ref: "ThingName"
+      Code:
+        ZipFile: "import json\nimport os\nimport boto3\nfrom datetime import datetime,\
+          \ timezone\n\ndef handler(event, context):\n    if event.get(\"confirm\"\
+          ) != \"STOP_ALL\":\n        raise ValueError(\n            \"Explicit confirmation\
+          \ required: confirm=STOP_ALL\"\n        )\n\n    client = boto3.client(\n\
+          \        \"iot-data\",\n        endpoint_url=\"https://\" + os.environ[\"\
+          IOT_ENDPOINT\"]\n    )\n    payload = {\n        \"command_id\": context.aws_request_id,\n\
+          \        \"action\": \"STOP_ALL\",\n        \"thing\": os.environ[\"THING_NAME\"\
+          ],\n        \"issued_at\": datetime.now(timezone.utc).isoformat(),\n   \
+          \     \"source\": \"manual-lambda\"\n    }\n    client.publish(\n      \
+          \  topic=os.environ[\"MQTT_TOPIC\"],\n        qos=1,\n        payload=json.dumps(payload)\n\
+          \    )\n    return {\"status\": \"published\", \"command\": payload}\n"
+    Type: "AWS::Lambda::Function"
+  LogsLogStream20260918LATEST3b53532039d94742af82caf93b1dbf39:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/18/[$LATEST]3b53532039d94742af82caf93b1dbf39"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IAMRoleLambdaGoldAggregatorrolejvikvc1m:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::041517176862:policy/service-role/AWSLambdaBasicExecutionRole-fc919629-0365-4e3e-a45a-a7e603b028f1"
+      MaxSessionDuration: 3600
+      RoleName: "Lambda_Gold_Aggregator-role-jvikvc1m"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  LogsLogStream20261017LATEST5f8eaaf8618f451199092fba454989b4:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/17/[$LATEST]5f8eaaf8618f451199092fba454989b4"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator1"
+  IAMRoleIotrulerole:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::041517176862:policy/service-role/aws-iot-rule-iotrule2-action-1-role-iot_rule_role_"
+      MaxSessionDuration: 3600
+      RoleName: "iot_rule_role_"
+      Policies:
+      - PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Resource: "arn:aws:s3:::sistemasciberfisicos/fabrica-data-lake-bronze-salvador/*"
+            Action:
+            - "s3:PutObject"
+            Effect: "Allow"
+          - Resource: "arn:aws:lambda:us-east-2:041517176862:function:Lambda_Silver_Processor"
+            Action:
+            - "lambda:InvokeFunction"
+            Effect: "Allow"
+        PolicyName: "action_iot"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "iot.amazonaws.com"
+  LogsLogStream20260926LATEST2db6bc20e8c0468596428122544da072:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/26/[$LATEST]2db6bc20e8c0468596428122544da072"
+      LogGroupName: "/aws/lambda/Silver_test"
+  EventsRuleRuleGeneradorCapaGoldSchedule1:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Events::Rule"
+    DeletionPolicy: "Retain"
+    Properties:
+      EventBusName: "default"
+      ScheduleExpression: "rate(2 minutes)"
+      Description: "Calendarizaci?n de funci?n lambda capa gold"
+      State: "DISABLED"
+      Targets:
+      - Arn: "arn:aws:lambda:us-east-2:041517176862:function:Lambda_Gold_Aggregator1"
+        RoleArn: "arn:aws:iam::041517176862:role/service-role/Amazon_EventBridge_Invoke_Lambda_1875100631"
+        Id: "Idb4665bb2-06cb-445e-ba60-1a14842b5997"
+      Id: "GeneradorCapaGoldSchedule1"
+      Tags: []
+      Name: "GeneradorCapaGoldSchedule1"
+  IoTCertificateQx:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IoT::Certificate"
+    DeletionPolicy: "Retain"
+    Properties:
+      Status: "ACTIVE"
+      CertificateMode: "DEFAULT"
+      CertificatePem: "-----BEGIN CERTIFICATE-----\nMIIDWTCCAkGgAwIBAgIUcGLW3Lz36CnBcqXhtFip2j47HsAwDQYJKoZIhvcNAQEL\n\
+        BQAwTTFLMEkGA1UECwxCQW1hem9uIFdlYiBTZXJ2aWNlcyBPPUFtYXpvbi5jb20g\nSW5jLiBMPVNlYXR0bGUgU1Q9V2FzaGluZ3RvbiBDPVVTMB4XDTI2MDkxODAzMDkw\n\
+        NVoXDTQ5MTIzMTIzNTk1OVowHjEcMBoGA1UEAwwTQVdTIElvVCBDZXJ0aWZpY2F0\nZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALrle/g1gFMdCX79IXOL\n\
+        /9VQ8Ou9XcMW6cc4m7xn04JdQLg5yhpV5Ntrf/XLSgeUi9p3TP3RNncmyE+x65ov\n9mR5Eb+k9eGZBLrlF8+uZbyUZAD9YdS9nnyDJs+SynYf34q4LQjWqoqg6sSEvrfF\n\
+        LKkY3oBf7QAeBOZb+OFoVimTNU6HNNH2Cut46Tc9HngwiauFkl+imYRZE0NGeSQd\nrD7EhBXou308LaPgPzgedS0rsZFyrRT2bOzh8oQYn4WrZKH3L3UbRO1q+hsk6pdU\n\
+        8zNqdY/CwKlS1Z1DIOEGHw1DIrT/efS82VOfhGQ8t5WbkTX21dEUVEsLyiLsNkf3\n/qkCAwEAAaNgMF4wHwYDVR0jBBgwFoAUKX9+/trCLfvQ4STPTUljW4lqjAgwHQYD\n\
+        VR0OBBYEFMCcTdfRs+svyKeG4DQ17Ui/jTFqMAwGA1UdEwEB/wQCMAAwDgYDVR0P\nAQH/BAQDAgeAMA0GCSqGSIb3DQEBCwUAA4IBAQC5KRp1SHgC/Z60Uo+aYWiSVurq\n\
+        XFLLTq5RQ2t2VUx1YsmVDvWff5e6MkkK472DDkDBPajNEjLyQUlB5mV4Qwc4jsfl\nD4WrZ6/lxigd26JHAoBuDek5H1tzm9BuzdcgXr1NYEsVEzuqo96p2vy65y1sxQRo\n\
+        uY6taVuAzMHPbiG8V2sNYsTHMsg3uxunnjce2Hh0GK+Zi4pg0H03sW6d9D7LZ/cS\nOztlC7MLbQaYnRX9uXGJTwJQBj9ZiDqyv5e7mX+FjOVtNwHah1flhe9SCcutRQwZ\n\
+        9/wBV3VprgCNJGJyCdDsOPDS4XdQd4uNLx0Gki6Bek8kzLk2leZQBUo4VHZp\n-----END CERTIFICATE-----\n"
+  LogsLogStream20261021LATEST1f5408807c6b4157a7dcca17f2d7b033:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/21/[$LATEST]1f5408807c6b4157a7dcca17f2d7b033"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IoTTopicRuleIotrule2:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IoT::TopicRule"
+    DeletionPolicy: "Retain"
+    Properties:
+      RuleName: "iotrule2"
+      Tags: []
+      TopicRulePayload:
+        RuleDisabled: false
+        Description: "Rule that publish the topic on s3"
+        AwsIotSqlVersion: "2016-03-23"
+        Actions:
+        - S3:
+            BucketName: "sistemasciberfisicos"
+            CannedAcl: "private"
+            Key: "fabrica-data-lake-bronze-salvador/raw/${topic()}/${timestamp()}.json"
+            RoleArn: "arn:aws:iam::041517176862:role/service-role/iot_rule_role_"
+        Sql: "SELECT * FROM 'fabrica/maquinas/telemetria'"
+  LogsLogStream20260919LATESTfe5b1c9078a74760b1020b973ee33f24:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/19/[$LATEST]fe5b1c9078a74760b1020b973ee33f24"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20260918LATEST7a7cc0c301ba4e5fb6eb4ee422805771:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/18/[$LATEST]7a7cc0c301ba4e5fb6eb4ee422805771"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IAMManagedPolicyPolicyserviceroleAWSLambdaBasicExecutionRole3119669c5fcd4d0dbe224dac3983cf38:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "AWSLambdaBasicExecutionRole-3119669c-5fcd-4d0d-be22-4dac3983cf38"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:logs:us-east-2:041517176862:*"
+          Action: "logs:CreateLogGroup"
+          Effect: "Allow"
+        - Resource:
+          - "arn:aws:logs:us-east-2:041517176862:log-group:/aws/lambda/Silver_test:*"
+          Action:
+          - "logs:CreateLogStream"
+          - "logs:PutLogEvents"
+          Effect: "Allow"
+      Roles:
+      - "Silver_test-role-kneniel7"
+      Users: []
+  CloudFormationStack:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFormation::Stack"
+    DeletionPolicy: "Retain"
+    Properties:
+      Description: "Three manually invoked MQTT command Lambdas and S3 message logging.\n"
+      Parameters:
+        ExistingBucketName: "sistemasciberfisicos"
+        ThingName: "Sensor_sim"
+        ExistingPrefix: "fabrica-data-lake-gold-salvador/gold/Operational_actions"
+        IoTDataEndpoint: "a1w6y3r95yz410-ats.iot.us-east-2.amazonaws.com"
+        ExistingTopic: "fabrica/maquinas/telemetria"
+      Capabilities:
+      - "CAPABILITY_IAM"
+      EnableTerminationProtection: false
+      TemplateBody: "\nDescription: >\n  Three manually invoked MQTT command Lambdas\
+        \ and S3 message logging.\n\nParameters:\n  ExistingTopic:\n    Type: String\n\
+        \    Description: Existing MQTT topic name, without leading slash\n\n  ThingName:\n\
+        \    Type: String\n    Description: Existing AWS IoT Thing name\n\n  IoTDataEndpoint:\n\
+        \    Type: String\n    Description: >\n      IoT Data endpoint hostname, e.g.\n\
+        \      abc123-ats.iot.us-east-1.amazonaws.com\n  \n  ExistingBucketName:\n\
+        \    Type: String\n    Default: sistemasciberfisicos\n\n  ExistingPrefix:\n\
+        \    Type: String\n    Default: fabrica-data-lake-gold-salvador/gold/Operational_actions\n\
+        \nResources:\n\n  # IoT Core assumes this role to write messages to S3\n \
+        \ IoTLoggingRole:\n    Type: AWS::IAM::Role\n    Properties:\n      AssumeRolePolicyDocument:\n\
+        \        Version: '2012-10-17'\n        Statement:\n          - Effect: Allow\n\
+        \            Principal:\n              Service: iot.amazonaws.com\n      \
+        \      Action: sts:AssumeRole\n      Policies:\n        - PolicyName: WriteMqttLogs\n\
+        \          PolicyDocument:\n            Version: '2012-10-17'\n          \
+        \  Statement:\n              - Effect: Allow\n                Action:\n  \
+        \                - s3:PutObject\n                Resource: !Sub\n        \
+        \          - '${BucketArn}/${Prefix}/*'\n                  - BucketArn: !Sub\
+        \ 'arn:${AWS::Partition}:s3:::${ExistingBucketName}'\n                   \
+        \ Prefix: !Ref ExistingPrefix\n\n  # Every published message on the existing\
+        \ topic is logged\n  MqttLoggingRule:\n    Type: AWS::IoT::TopicRule\n   \
+        \ Properties:\n      RuleName: !Sub 'ManualMqttLogging-${AWS::StackName}'\n\
+        \      TopicRulePayload:\n        AwsIotSqlVersion: '2016-03-23'\n       \
+        \ Sql: !Sub \"SELECT *, topic() AS mqtt_topic, timestamp() AS received_at\
+        \ FROM '${ExistingTopic}'\"\n        RuleDisabled: false\n        Actions:\n\
+        \          - S3:\n              BucketName: !Ref ExistingBucketName\n    \
+        \          Key: !Sub '${ExistingPrefix}/\\${!timestamp()}-\\${!newuuid()}.json'\n\
+        \              RoleArn: !GetAtt IoTLoggingRole.Arn\n\n  # Shared least-privilege\
+        \ role for the three functions\n  MqttLambdaRole:\n    Type: AWS::IAM::Role\n\
+        \    Properties:\n      AssumeRolePolicyDocument:\n        Version: '2012-10-17'\n\
+        \        Statement:\n          - Effect: Allow\n            Principal:\n \
+        \             Service: lambda.amazonaws.com\n            Action: sts:AssumeRole\n\
+        \      ManagedPolicyArns:\n        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'\n\
+        \      Policies:\n        - PolicyName: PublishConfiguredTopic\n         \
+        \ PolicyDocument:\n            Version: '2012-10-17'\n            Statement:\n\
+        \              - Effect: Allow\n                Action:\n                \
+        \  - iot:Publish\n                Resource:\n                  - !Sub 'arn:${AWS::Partition}:iot:${AWS::Region}:${AWS::AccountId}:topic/${ExistingTopic}'\n\
+        \n  # Lambda 1: publish total-stop command\n  StopAllLambda:\n    Type: AWS::Lambda::Function\n\
+        \    Properties:\n      FunctionName: iot_paro_total\n      Runtime: python3.12\n\
+        \      Handler: index.handler\n      Timeout: 10\n      Role: !GetAtt MqttLambdaRole.Arn\n\
+        \      Environment:\n        Variables:\n          MQTT_TOPIC: !Ref ExistingTopic\n\
+        \          IOT_ENDPOINT: !Ref IoTDataEndpoint\n          THING_NAME: !Ref\
+        \ ThingName\n      Code:\n        ZipFile: |\n          import json\n    \
+        \      import os\n          import boto3\n          from datetime import datetime,\
+        \ timezone\n\n          def handler(event, context):\n              if event.get(\"\
+        confirm\") != \"STOP_ALL\":\n                  raise ValueError(\n       \
+        \               \"Explicit confirmation required: confirm=STOP_ALL\"\n   \
+        \               )\n\n              client = boto3.client(\n              \
+        \    \"iot-data\",\n                  endpoint_url=\"https://\" + os.environ[\"\
+        IOT_ENDPOINT\"]\n              )\n              payload = {\n            \
+        \      \"command_id\": context.aws_request_id,\n                  \"action\"\
+        : \"STOP_ALL\",\n                  \"thing\": os.environ[\"THING_NAME\"],\n\
+        \                  \"issued_at\": datetime.now(timezone.utc).isoformat(),\n\
+        \                  \"source\": \"manual-lambda\"\n              }\n      \
+        \        client.publish(\n                  topic=os.environ[\"MQTT_TOPIC\"\
+        ],\n                  qos=1,\n                  payload=json.dumps(payload)\n\
+        \              )\n              return {\"status\": \"published\", \"command\"\
+        : payload}\n\n  # Lambda 2: publish a single-device stop command\n  StopDeviceLambda:\n\
+        \    Type: AWS::Lambda::Function\n    Properties:\n      FunctionName: iot-paro-individual\n\
+        \      Runtime: python3.12\n      Handler: index.handler\n      Timeout: 10\n\
+        \      Role: !GetAtt MqttLambdaRole.Arn\n      Environment:\n        Variables:\n\
+        \          MQTT_TOPIC: !Ref ExistingTopic\n          IOT_ENDPOINT: !Ref IoTDataEndpoint\n\
+        \          THING_NAME: !Ref ThingName\n      Code:\n        ZipFile: |\n \
+        \         import json\n          import os\n          import boto3\n     \
+        \     from datetime import datetime, timezone\n\n          def handler(event,\
+        \ context):\n              device = event.get(\"device_id\")\n           \
+        \   if not device:\n                  raise ValueError(\"device_id is required\"\
+        )\n\n              if event.get(\"confirm\") != device:\n                \
+        \  raise ValueError(\n                      \"Confirmation must match device_id\"\
+        \n                  )\n\n              client = boto3.client(\n          \
+        \        \"iot-data\",\n                  endpoint_url=\"https://\" + os.environ[\"\
+        IOT_ENDPOINT\"]\n              )\n              payload = {\n            \
+        \      \"command_id\": context.aws_request_id,\n                  \"action\"\
+        : \"STOP_DEVICE\",\n                  \"device_id\": device,\n           \
+        \       \"thing\": os.environ[\"THING_NAME\"],\n                  \"issued_at\"\
+        : datetime.now(timezone.utc).isoformat(),\n                  \"source\": \"\
+        manual-lambda\"\n              }\n              client.publish(\n        \
+        \          topic=os.environ[\"MQTT_TOPIC\"],\n                  qos=1,\n \
+        \                 payload=json.dumps(payload)\n              )\n         \
+        \     return {\"status\": \"published\", \"command\": payload}\n\n  # Lambda\
+        \ 3: intentionally non-operational until action is defined\n  CustomActionLambda:\n\
+        \    Type: AWS::Lambda::Function\n    Properties:\n      FunctionName: iot-paro-accion_custom\n\
+        \      Runtime: python3.12\n      Handler: index.handler\n      Timeout: 10\n\
+        \      Role: !GetAtt MqttLambdaRole.Arn\n      Environment:\n        Variables:\n\
+        \          MQTT_TOPIC: !Ref ExistingTopic\n          IOT_ENDPOINT: !Ref IoTDataEndpoint\n\
+        \          THING_NAME: !Ref ThingName\n      Code:\n        ZipFile: |\n \
+        \         def handler(event, context):\n              raise NotImplementedError(\n\
+        \                  \"Define and validate the third action before deployment\
+        \ use\"\n              )\n\nOutputs:\n  StopAllFunction:\n    Value: !Ref\
+        \ StopAllLambda\n\n  StopDeviceFunction:\n    Value: !Ref StopDeviceLambda\n\
+        \n  CustomActionFunction:\n    Value: !Ref CustomActionLambda\n  \n  LogBucket:\n\
+        \    Value: !Ref ExistingBucketName\n\n  LogBucketPath:\n    Value: !Sub 's3://${ExistingBucketName}/${ExistingPrefix}/'\n\
+        \n  LoggingRule:\n    Value: !Ref MqttLoggingRule"
+      DisableRollback: false
+      StackName: "lambdas-test-iac2"
+  StopDeviceLambda:
+    Properties:
+      Role:
+        Fn::GetAtt: "MqttLambdaRole.Arn"
+      FunctionName: "iot-paro-individual"
+      Runtime: "python3.12"
+      Timeout: 10
+      Handler: "index.handler"
+      Environment:
+        Variables:
+          IOT_ENDPOINT:
+            Ref: "IoTDataEndpoint"
+          MQTT_TOPIC:
+            Ref: "ExistingTopic"
+          THING_NAME:
+            Ref: "ThingName"
+      Code:
+        ZipFile: "import json\nimport os\nimport boto3\nfrom datetime import datetime,\
+          \ timezone\n\ndef handler(event, context):\n    device = event.get(\"device_id\"\
+          )\n    if not device:\n        raise ValueError(\"device_id is required\"\
+          )\n\n    if event.get(\"confirm\") != device:\n        raise ValueError(\n\
+          \            \"Confirmation must match device_id\"\n        )\n\n    client\
+          \ = boto3.client(\n        \"iot-data\",\n        endpoint_url=\"https://\"\
+          \ + os.environ[\"IOT_ENDPOINT\"]\n    )\n    payload = {\n        \"command_id\"\
+          : context.aws_request_id,\n        \"action\": \"STOP_DEVICE\",\n      \
+          \  \"device_id\": device,\n        \"thing\": os.environ[\"THING_NAME\"\
+          ],\n        \"issued_at\": datetime.now(timezone.utc).isoformat(),\n   \
+          \     \"source\": \"manual-lambda\"\n    }\n    client.publish(\n      \
+          \  topic=os.environ[\"MQTT_TOPIC\"],\n        qos=1,\n        payload=json.dumps(payload)\n\
+          \    )\n    return {\"status\": \"published\", \"command\": payload}\n"
+    Type: "AWS::Lambda::Function"
+  LogsLogStream20260913LATESTed20ac5a7673462dacf5b3c2a369eb4c:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]ed20ac5a7673462dacf5b3c2a369eb4c"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20260913LATEST2f38f327bbf94dfcbdf5e15e1f7ae4e4:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]2f38f327bbf94dfcbdf5e15e1f7ae4e4"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator"
+  IAMRoleIotrole3:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      MaxSessionDuration: 3600
+      RoleName: "iot_role_3"
+      Policies:
+      - PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Resource: "arn:aws:s3:::sistemasciberfisicos/*"
+            Action:
+            - "s3:PutObject"
+            Effect: "Allow"
+          - Resource: "arn:aws:lambda:us-east-2:041517176862:function:Lambda_Silver_Processor"
+            Action:
+            - "lambda:InvokeFunction"
+            Effect: "Allow"
+        PolicyName: "iot_policy"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "iot.amazonaws.com"
+  IAMRoleLambdaGoldAggregator1rolee4kc263x:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::041517176862:policy/service-role/AWSLambdaBasicExecutionRole-26301fac-182a-443c-921d-9f30b4e2c640"
+      MaxSessionDuration: 3600
+      RoleName: "Lambda_Gold_Aggregator1-role-e4kc263x"
+      Policies:
+      - PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Resource: "arn:aws:logs:us-east-2:041517176862:log-group:/aws/lambda/*"
+            Action:
+            - "logs:CreateLogGroup"
+            - "logs:CreateLogStream"
+            - "logs:PutLogEvents"
+            Effect: "Allow"
+            Sid: "CloudWatchLogsPermissions"
+          - Resource:
+            - "arn:aws:dynamodb:us-east-2:041517176862:table/MaquinasTelemetriaSilver"
+            - "arn:aws:dynamodb:us-east-2:041517176862:table/MaquinasTelemetriaSilver/index/*"
+            Action:
+            - "dynamodb:PutItem"
+            - "dynamodb:GetItem"
+            - "dynamodb:UpdateItem"
+            - "dynamodb:Scan"
+            - "dynamodb:Query"
+            Effect: "Allow"
+            Sid: "DynamoDBSilverPermissions"
+          - Resource:
+            - "arn:aws:s3:::*"
+            - "arn:aws:s3:::*/*"
+            Action:
+            - "s3:GetObject"
+            - "s3:PutObject"
+            - "s3:ListBucket"
+            Effect: "Allow"
+            Sid: "S3DataLakePermissions"
+        PolicyName: "lambda_gold_policy"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  LogsLogStream20260913LATEST74e5db232f9d43218a30c6d51bbf4ecf:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]74e5db232f9d43218a30c6d51bbf4ecf"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator"
+  LogsLogStream20260926LATESTcddac2ee795a476c83561656eab79c1e:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/26/[$LATEST]cddac2ee795a476c83561656eab79c1e"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IAMRoleSilvertestrolekneniel7:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+      - "arn:aws:iam::aws:policy/service-role/AWSLambdaDynamoDBExecutionRole"
+      - "arn:aws:iam::041517176862:policy/service-role/AWSLambdaBasicExecutionRole-3119669c-5fcd-4d0d-be22-4dac3983cf38"
+      MaxSessionDuration: 3600
+      RoleName: "Silver_test-role-kneniel7"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  LogsLogStream20260913LATEST9e6b97c80d83466c87ca3a182f86bdb1:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]9e6b97c80d83466c87ca3a182f86bdb1"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator"
+  LogsLogStream20261021LATEST7bce140b657844659ce0ee5c6992e478:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/21/[$LATEST]7bce140b657844659ce0ee5c6992e478"
+      LogGroupName: "/aws/lambda/iot_paro_total"
+  LogsLogStream20260913LATEST7521c1a242d34ea1ad161a98c165a82c:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]7521c1a242d34ea1ad161a98c165a82c"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogGroupawslambdaLambdaSilverProcessor:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogGroup"
+    DeletionPolicy: "Retain"
+    Properties:
+      FieldIndexPolicies: []
+      LogGroupClass: "STANDARD"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+      BearerTokenAuthenticationEnabled: false
+      DeletionProtectionEnabled: false
+      DataProtectionPolicy: {}
+  LogsLogGroupawslambdaiotparototal:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogGroup"
+    DeletionPolicy: "Retain"
+    Properties:
+      FieldIndexPolicies: []
+      LogGroupClass: "STANDARD"
+      LogGroupName: "/aws/lambda/iot_paro_total"
+      BearerTokenAuthenticationEnabled: false
+      DeletionProtectionEnabled: false
+      DataProtectionPolicy: {}
+  LogsLogStream20261021LATEST5d4ccd2bc11a493987e15d71336f4ec5:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/21/[$LATEST]5d4ccd2bc11a493987e15d71336f4ec5"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  CloudFormationStackS2:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFormation::Stack"
+    DeletionPolicy: "Retain"
+    Properties:
+      Description: "Three manually invoked MQTT command Lambdas and S3 message logging.\n"
+      Parameters:
+        ExistingBucketName: "sistemasciberfisicos"
+        ThingName: "Sensor_sim"
+        ExistingPrefix: "fabrica-data-lake-gold-salvador/gold/Operational_actions"
+        IoTDataEndpoint: "a1w6y3r95yz410-ats.iot.us-east-2.amazonaws.com"
+        ExistingTopic: "fabrica/maquinas/telemetria"
+      Capabilities:
+      - "CAPABILITY_IAM"
+      EnableTerminationProtection: false
+      TemplateBody: "\nDescription: >\n  Three manually invoked MQTT command Lambdas\
+        \ and S3 message logging.\n\nParameters:\n  ExistingTopic:\n    Type: String\n\
+        \    Description: Existing MQTT topic name, without leading slash\n\n  ThingName:\n\
+        \    Type: String\n    Description: Existing AWS IoT Thing name\n\n  IoTDataEndpoint:\n\
+        \    Type: String\n    Description: >\n      IoT Data endpoint hostname, e.g.\n\
+        \      abc123-ats.iot.us-east-1.amazonaws.com\n  \n  ExistingBucketName:\n\
+        \    Type: String\n    Default: sistemasciberfisicos\n\n  ExistingPrefix:\n\
+        \    Type: String\n    Default: fabrica-data-lake-gold-salvador/gold/Operational_actions\n\
+        \nResources:\n\n  # IoT Core assumes this role to write messages to S3\n \
+        \ IoTLoggingRole:\n    Type: AWS::IAM::Role\n    Properties:\n      AssumeRolePolicyDocument:\n\
+        \        Version: '2012-10-17'\n        Statement:\n          - Effect: Allow\n\
+        \            Principal:\n              Service: iot.amazonaws.com\n      \
+        \      Action: sts:AssumeRole\n      Policies:\n        - PolicyName: WriteMqttLogs\n\
+        \          PolicyDocument:\n            Version: '2012-10-17'\n          \
+        \  Statement:\n              - Effect: Allow\n                Action:\n  \
+        \                - s3:PutObject\n                Resource: !Sub\n        \
+        \          - '${BucketArn}/${Prefix}/*'\n                  - BucketArn: !Sub\
+        \ 'arn:${AWS::Partition}:s3:::${ExistingBucketName}'\n                   \
+        \ Prefix: !Ref ExistingPrefix\n\n  # Every published message on the existing\
+        \ topic is logged\n  MqttLoggingRule:\n    Type: AWS::IoT::TopicRule\n   \
+        \ Properties:\n      RuleName: !Sub 'ManualMqttLogging_${AWS::StackName}'\n\
+        \      TopicRulePayload:\n        AwsIotSqlVersion: '2016-03-23'\n       \
+        \ Sql: !Sub \"SELECT *, topic() AS mqtt_topic, timestamp() AS received_at\
+        \ FROM '${ExistingTopic}'\"\n        RuleDisabled: false\n        Actions:\n\
+        \          - S3:\n              BucketName: !Ref ExistingBucketName\n    \
+        \          Key: !Sub '${ExistingPrefix}/\\${!timestamp()}-\\${!newuuid()}.json'\n\
+        \              RoleArn: !GetAtt IoTLoggingRole.Arn\n\n  # Shared least-privilege\
+        \ role for the three functions\n  MqttLambdaRole:\n    Type: AWS::IAM::Role\n\
+        \    Properties:\n      AssumeRolePolicyDocument:\n        Version: '2012-10-17'\n\
+        \        Statement:\n          - Effect: Allow\n            Principal:\n \
+        \             Service: lambda.amazonaws.com\n            Action: sts:AssumeRole\n\
+        \      ManagedPolicyArns:\n        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'\n\
+        \      Policies:\n        - PolicyName: PublishConfiguredTopic\n         \
+        \ PolicyDocument:\n            Version: '2012-10-17'\n            Statement:\n\
+        \              - Effect: Allow\n                Action:\n                \
+        \  - iot:Publish\n                Resource:\n                  - !Sub 'arn:${AWS::Partition}:iot:${AWS::Region}:${AWS::AccountId}:topic/${ExistingTopic}'\n\
+        \n  # Lambda 1: publish total-stop command\n  StopAllLambda:\n    Type: AWS::Lambda::Function\n\
+        \    Properties:\n      FunctionName: iot_paro_total\n      Runtime: python3.12\n\
+        \      Handler: index.handler\n      Timeout: 10\n      Role: !GetAtt MqttLambdaRole.Arn\n\
+        \      Environment:\n        Variables:\n          MQTT_TOPIC: !Ref ExistingTopic\n\
+        \          IOT_ENDPOINT: !Ref IoTDataEndpoint\n          THING_NAME: !Ref\
+        \ ThingName\n      Code:\n        ZipFile: |\n          import json\n    \
+        \      import os\n          import boto3\n          from datetime import datetime,\
+        \ timezone\n\n          def handler(event, context):\n              if event.get(\"\
+        confirm\") != \"STOP_ALL\":\n                  raise ValueError(\n       \
+        \               \"Explicit confirmation required: confirm=STOP_ALL\"\n   \
+        \               )\n\n              client = boto3.client(\n              \
+        \    \"iot-data\",\n                  endpoint_url=\"https://\" + os.environ[\"\
+        IOT_ENDPOINT\"]\n              )\n              payload = {\n            \
+        \      \"command_id\": context.aws_request_id,\n                  \"action\"\
+        : \"STOP_ALL\",\n                  \"thing\": os.environ[\"THING_NAME\"],\n\
+        \                  \"issued_at\": datetime.now(timezone.utc).isoformat(),\n\
+        \                  \"source\": \"manual-lambda\"\n              }\n      \
+        \        client.publish(\n                  topic=os.environ[\"MQTT_TOPIC\"\
+        ],\n                  qos=1,\n                  payload=json.dumps(payload)\n\
+        \              )\n              return {\"status\": \"published\", \"command\"\
+        : payload}\n\n  # Lambda 2: publish a single-device stop command\n  StopDeviceLambda:\n\
+        \    Type: AWS::Lambda::Function\n    Properties:\n      FunctionName: iot-paro-individual\n\
+        \      Runtime: python3.12\n      Handler: index.handler\n      Timeout: 10\n\
+        \      Role: !GetAtt MqttLambdaRole.Arn\n      Environment:\n        Variables:\n\
+        \          MQTT_TOPIC: !Ref ExistingTopic\n          IOT_ENDPOINT: !Ref IoTDataEndpoint\n\
+        \          THING_NAME: !Ref ThingName\n      Code:\n        ZipFile: |\n \
+        \         import json\n          import os\n          import boto3\n     \
+        \     from datetime import datetime, timezone\n\n          def handler(event,\
+        \ context):\n              device = event.get(\"device_id\")\n           \
+        \   if not device:\n                  raise ValueError(\"device_id is required\"\
+        )\n\n              if event.get(\"confirm\") != device:\n                \
+        \  raise ValueError(\n                      \"Confirmation must match device_id\"\
+        \n                  )\n\n              client = boto3.client(\n          \
+        \        \"iot-data\",\n                  endpoint_url=\"https://\" + os.environ[\"\
+        IOT_ENDPOINT\"]\n              )\n              payload = {\n            \
+        \      \"command_id\": context.aws_request_id,\n                  \"action\"\
+        : \"STOP_DEVICE\",\n                  \"device_id\": device,\n           \
+        \       \"thing\": os.environ[\"THING_NAME\"],\n                  \"issued_at\"\
+        : datetime.now(timezone.utc).isoformat(),\n                  \"source\": \"\
+        manual-lambda\"\n              }\n              client.publish(\n        \
+        \          topic=os.environ[\"MQTT_TOPIC\"],\n                  qos=1,\n \
+        \                 payload=json.dumps(payload)\n              )\n         \
+        \     return {\"status\": \"published\", \"command\": payload}\n\n  # Lambda\
+        \ 3: intentionally non-operational until action is defined\n  CustomActionLambda:\n\
+        \    Type: AWS::Lambda::Function\n    Properties:\n      FunctionName: iot-paro-accion_custom\n\
+        \      Runtime: python3.12\n      Handler: index.handler\n      Timeout: 10\n\
+        \      Role: !GetAtt MqttLambdaRole.Arn\n      Environment:\n        Variables:\n\
+        \          MQTT_TOPIC: !Ref ExistingTopic\n          IOT_ENDPOINT: !Ref IoTDataEndpoint\n\
+        \          THING_NAME: !Ref ThingName\n      Code:\n        ZipFile: |\n \
+        \         def handler(event, context):\n              raise NotImplementedError(\n\
+        \                  \"Define and validate the third action before deployment\
+        \ use\"\n              )\n\nOutputs:\n  StopAllFunction:\n    Value: !Ref\
+        \ StopAllLambda\n\n  StopDeviceFunction:\n    Value: !Ref StopDeviceLambda\n\
+        \n  CustomActionFunction:\n    Value: !Ref CustomActionLambda\n  \n  LogBucket:\n\
+        \    Value: !Ref ExistingBucketName\n\n  LogBucketPath:\n    Value: !Sub 's3://${ExistingBucketName}/${ExistingPrefix}/'\n\
+        \n  LoggingRule:\n    Value: !Ref MqttLoggingRule"
+      DisableRollback: false
+      StackName: "lambdastest"
+  LogsLogStream20260926LATEST99693db942ab4b9dbaf5990aba8dea4b:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/26/[$LATEST]99693db942ab4b9dbaf5990aba8dea4b"
+      LogGroupName: "/aws/lambda/Silver_test"
+  LambdaFunctionLambdaSilverProcessor:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::Function"
+    DeletionPolicy: "Retain"
+    Properties:
+      MemorySize: 128
+      Description: ""
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 3
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        SourceKMSKeyArn:
+          Ref: "LambdaFunctionLambdaSilverProcessorCodeSourceKMSKeyArnkzcru"
+        S3ObjectVersion:
+          Ref: "LambdaFunctionLambdaSilverProcessorCodeS3ObjectVersionJVlqK"
+        S3Bucket:
+          Ref: "LambdaFunctionLambdaSilverProcessorCodeS3BucketJxmTF"
+        ZipFile:
+          Ref: "LambdaFunctionLambdaSilverProcessorCodeZipFileqCWwf"
+        S3Key:
+          Ref: "LambdaFunctionLambdaSilverProcessorCodeS3KeyUs62g"
+        S3ObjectStorageMode:
+          Ref: "LambdaFunctionLambdaSilverProcessorCodeS3ObjectStorageModenpar9"
+        ImageUri:
+          Ref: "LambdaFunctionLambdaSilverProcessorCodeImageUriJUcxd"
+      Role: "arn:aws:iam::041517176862:role/Lambda-DataLake-Role"
+      FileSystemConfigs: []
+      FunctionName: "Lambda_Silver_Processor"
+      Runtime: "python3.14"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: "/aws/lambda/Lambda_Silver_Processor"
+      RecursiveLoop: "Terminate"
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+      - "x86_64"
+  LogsLogStream20260926LATEST3d1d479bbece47d2b59431fd1abad748:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/26/[$LATEST]3d1d479bbece47d2b59431fd1abad748"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IoTPolicyGb:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IoT::Policy"
+    DeletionPolicy: "Retain"
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:iot:us-east-2:041517176862:client/Sensor_Planta_Principal"
+          Action: "iot:Connect"
+          Effect: "Allow"
+        - Resource: "arn:aws:iot:us-east-2:041517176862:topic/fabrica/maquinas/telemetria"
+          Action: "iot:Publish"
+          Effect: "Allow"
+      Tags: []
+      PolicyName: "devicepolicy"
+  LogsLogStream20261021LATEST81e0b82cfe7b4dcd966b343d97711d41:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/21/[$LATEST]81e0b82cfe7b4dcd966b343d97711d41"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LambdaFunctionLambdaGoldAggregator1:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::Function"
+    DeletionPolicy: "Retain"
+    Properties:
+      MemorySize: 128
+      Description: ""
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 3
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        SourceKMSKeyArn:
+          Ref: "LambdaFunctionLambdaGoldAggregator1CodeSourceKMSKeyArnfq2ka"
+        S3ObjectVersion:
+          Ref: "LambdaFunctionLambdaGoldAggregator1CodeS3ObjectVersion8PLyn"
+        S3Bucket:
+          Ref: "LambdaFunctionLambdaGoldAggregator1CodeS3BucketIDCSv"
+        ZipFile:
+          Ref: "LambdaFunctionLambdaGoldAggregator1CodeZipFile0l4Of"
+        S3Key:
+          Ref: "LambdaFunctionLambdaGoldAggregator1CodeS3Keyq66sZ"
+        S3ObjectStorageMode:
+          Ref: "LambdaFunctionLambdaGoldAggregator1CodeS3ObjectStorageModeIxq4g"
+        ImageUri:
+          Ref: "LambdaFunctionLambdaGoldAggregator1CodeImageUriZ5XEi"
+      Role: "arn:aws:iam::041517176862:role/service-role/Lambda_Gold_Aggregator1-role-e4kc263x"
+      FileSystemConfigs: []
+      FunctionName: "Lambda_Gold_Aggregator1"
+      Runtime: "python3.14"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: "/aws/lambda/Lambda_Gold_Aggregator1"
+      RecursiveLoop: "Terminate"
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+      - "x86_64"
+  LambdaPermissionFunctionSilvertest:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::Permission"
+    DeletionPolicy: "Retain"
+    Properties:
+      FunctionName: "arn:aws:lambda:us-east-2:041517176862:function:Silver_test"
+      Action: "lambda:InvokeFunction"
+      SourceArn: "arn:aws:iot:us-east-2:041517176862:rule/IngestIoTRule"
+      Principal: "iot.amazonaws.com"
+  IAMRoleAmazonEventBridgeInvokeLambda1875100631:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::041517176862:policy/service-role/Amazon_EventBridge_Invoke_Lambda_1875100631"
+      MaxSessionDuration: 3600
+      RoleName: "Amazon_EventBridge_Invoke_Lambda_1875100631"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Condition:
+            StringEquals:
+              aws:SourceAccount: "041517176862"
+              aws:SourceArn: "arn:aws:events:us-east-2:041517176862:rule/GeneradorCapaGoldSchedule1"
+          Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "events.amazonaws.com"
+          Sid: "TrustEventBridgeService"
+  MqttLoggingRule:
+    Properties:
+      RuleName:
+        Fn::Sub: "ManualMqttLogging_${AWS::StackName}"
+      TopicRulePayload:
+        RuleDisabled: false
+        AwsIotSqlVersion: "2016-03-23"
+        Actions:
+        - S3:
+            Key:
+              Fn::Sub: "${ExistingPrefix}/\\${!timestamp()}-\\${!newuuid()}.json"
+            RoleArn:
+              Fn::GetAtt: "IoTLoggingRole.Arn"
+            BucketName:
+              Ref: "ExistingBucketName"
+        Sql:
+          Fn::Sub: "SELECT *, topic() AS mqtt_topic, timestamp() AS received_at FROM\
+            \ '${ExistingTopic}'"
+    Type: "AWS::IoT::TopicRule"
+  IAMManagedPolicyPolicyserviceroleawsiotruleiotrule2action1roleiotrulerole:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "aws-iot-rule-iotrule2-action-1-role-iot_rule_role_"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Resource: "arn:aws:s3:::sistemasciberfisicos/*"
+          Action: "s3:PutObject"
+          Effect: "Allow"
+      Roles:
+      - "iot_rule_role_"
+      Users: []
+  LogsLogStream20261021LATEST0857505a4f0047df9b9f71a1cca96da7:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/21/[$LATEST]0857505a4f0047df9b9f71a1cca96da7"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LambdaPermissionFunctionLambdaSilverProcessor:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::Permission"
+    DeletionPolicy: "Retain"
+    Properties:
+      FunctionName: "arn:aws:lambda:us-east-2:041517176862:function:Lambda_Silver_Processor"
+      Action: "lambda:InvokeFunction"
+      SourceArn: "arn:aws:iot:us-east-2:041517176862:rule/IngestIoTRule"
+      Principal: "iot.amazonaws.com"
+  LogsLogStream20260913LATEST06fb62bbadef453d8c0383668696c425:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]06fb62bbadef453d8c0383668696c425"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator"
+  IAMManagedPolicyPolicyserviceroleAWSLambdaBasicExecutionRoled0530073c92244fbb66b80da773c7ade:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "AWSLambdaBasicExecutionRole-d0530073-c922-44fb-b66b-80da773c7ade"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:logs:us-east-2:041517176862:*"
+          Action: "logs:CreateLogGroup"
+          Effect: "Allow"
+        - Resource:
+          - "arn:aws:logs:us-east-2:041517176862:log-group:/aws/lambda/Lambda_Silver_Processor:*"
+          Action:
+          - "logs:CreateLogStream"
+          - "logs:PutLogEvents"
+          Effect: "Allow"
+      Roles:
+      - "Lambda_Silver_Processor-role-470xxcc4"
+      Users: []
+  LogsLogStream20260918LATESTaf4b7c71f5cf480abf774fe85cf9d3b7:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/18/[$LATEST]af4b7c71f5cf480abf774fe85cf9d3b7"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IAMManagedPolicyPolicyLambdaGoldAggregatorrolePolicy:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "Lambda_Gold_Aggregator-rolePolicy"
+      Path: "/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:logs:us-east-2:041517176862:log-group:/aws/lambda/*"
+          Action:
+          - "logs:CreateLogGroup"
+          - "logs:CreateLogStream"
+          - "logs:PutLogEvents"
+          Effect: "Allow"
+          Sid: "CloudWatchLogsPermissions"
+        - Resource:
+          - "arn:aws:dynamodb:us-east-2:041517176862:table/MaquinasTelemetriaSilver"
+          - "arn:aws:dynamodb:us-east-2:041517176862:table/MaquinasTelemetriaSilver/index/*"
+          Action:
+          - "dynamodb:PutItem"
+          - "dynamodb:GetItem"
+          - "dynamodb:UpdateItem"
+          - "dynamodb:Scan"
+          - "dynamodb:Query"
+          Effect: "Allow"
+          Sid: "DynamoDBSilverPermissions"
+        - Resource:
+          - "arn:aws:s3:::*"
+          - "arn:aws:s3:::*/*"
+          Action:
+          - "s3:GetObject"
+          - "s3:PutObject"
+          - "s3:ListBucket"
+          Effect: "Allow"
+          Sid: "S3DataLakePermissions"
+      Roles:
+      - "Lambda_Gold_Aggregator-role"
+      Users: []
+  LogsLogStream20260913LATESTf2e9830e81544ecd99fe50e9944172f5:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]f2e9830e81544ecd99fe50e9944172f5"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20261021LATEST4fe2b257c3cf4a7a88bf938848aa4941:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/21/[$LATEST]4fe2b257c3cf4a7a88bf938848aa4941"
+      LogGroupName: "/aws/lambda/iot_paro_total"
+  LogsLogStream20260913LATEST817412be5b5542d2978f25f53cf84c9d:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]817412be5b5542d2978f25f53cf84c9d"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  CustomActionLambda:
+    Properties:
+      Role:
+        Fn::GetAtt: "MqttLambdaRole.Arn"
+      FunctionName: "iot-paro-accion_custom"
+      Runtime: "python3.12"
+      Timeout: 10
+      Handler: "index.handler"
+      Environment:
+        Variables:
+          IOT_ENDPOINT:
+            Ref: "IoTDataEndpoint"
+          MQTT_TOPIC:
+            Ref: "ExistingTopic"
+          THING_NAME:
+            Ref: "ThingName"
+      Code:
+        ZipFile: "def handler(event, context):\n    raise NotImplementedError(\n \
+          \       \"Define and validate the third action before deployment use\"\n\
+          \    )\n"
+    Type: "AWS::Lambda::Function"
+  LogsLogStream20261017LATEST68b2066fdc454aaf9cdd037667d698f6:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/17/[$LATEST]68b2066fdc454aaf9cdd037667d698f6"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator1"
+  IAMRoleIoTRuleS3AccessRole:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      MaxSessionDuration: 3600
+      RoleName: "IoTRuleS3AccessRole"
+      Policies:
+      - PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Resource: "arn:aws:s3:::sistemasciberfisicos/fabrica-data-lake-bronze-salvador/*"
+            Action:
+            - "s3:PutObject"
+            Effect: "Allow"
+          - Resource: "arn:aws:lambda:us-east-2:041517176862:function:Lambda_Silver_Processor"
+            Action:
+            - "lambda:InvokeFunction"
+            Effect: "Allow"
+        PolicyName: "IoTBroncePolicy"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "iot.amazonaws.com"
+  IAMRoleAmazonEventBridgeInvokeLambda1904209576:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::041517176862:policy/service-role/Amazon_EventBridge_Invoke_Lambda_1904209576"
+      MaxSessionDuration: 3600
+      RoleName: "Amazon_EventBridge_Invoke_Lambda_1904209576"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Condition:
+            StringEquals:
+              aws:SourceAccount: "041517176862"
+              aws:SourceArn: "arn:aws:events:us-east-2:041517176862:rule/GeneradorCapaGoldSchedule"
+          Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "events.amazonaws.com"
+          Sid: "TrustEventBridgeService"
+  LambdaFunctionSilvertest:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::Function"
+    DeletionPolicy: "Retain"
+    Properties:
+      MemorySize: 128
+      Description: ""
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 3
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        SourceKMSKeyArn:
+          Ref: "LambdaFunctionSilvertestCodeSourceKMSKeyArneKEkG"
+        S3ObjectVersion:
+          Ref: "LambdaFunctionSilvertestCodeS3ObjectVersion1nhzt"
+        S3Bucket:
+          Ref: "LambdaFunctionSilvertestCodeS3BucketjLvVG"
+        ZipFile:
+          Ref: "LambdaFunctionSilvertestCodeZipFileuQjS7"
+        S3Key:
+          Ref: "LambdaFunctionSilvertestCodeS3Key1PgdA"
+        S3ObjectStorageMode:
+          Ref: "LambdaFunctionSilvertestCodeS3ObjectStorageModeJL817"
+        ImageUri:
+          Ref: "LambdaFunctionSilvertestCodeImageUri9qzDA"
+      Role: "arn:aws:iam::041517176862:role/service-role/Silver_test-role-kneniel7"
+      FileSystemConfigs: []
+      FunctionName: "Silver_test"
+      Runtime: "python3.11"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: "/aws/lambda/Silver_test"
+      RecursiveLoop: "Terminate"
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+      - "x86_64"
+  IAMRoleLambdaGoldAggregatorrole:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      - "arn:aws:iam::041517176862:policy/Lambda_Gold_Aggregator-rolePolicy"
+      MaxSessionDuration: 3600
+      RoleName: "Lambda_Gold_Aggregator-role"
+      Description: ""
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  LogsLogGroupawslambdaSilvertest:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogGroup"
+    DeletionPolicy: "Retain"
+    Properties:
+      FieldIndexPolicies: []
+      LogGroupClass: "STANDARD"
+      LogGroupName: "/aws/lambda/Silver_test"
+      BearerTokenAuthenticationEnabled: false
+      DeletionProtectionEnabled: false
+      DataProtectionPolicy: {}
+  IAMRoleLambdaSilverProcessorrolec5ppxw2k:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::041517176862:policy/service-role/AWSLambdaBasicExecutionRole-41a3535e-f572-4418-ba08-d403b25cd2e0"
+      MaxSessionDuration: 3600
+      RoleName: "Lambda_Silver_Processor-role-c5ppxw2k"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  IAMRoleIotRule3:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      MaxSessionDuration: 3600
+      RoleName: "iotRule3"
+      Policies:
+      - PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Resource: "arn:aws:s3:::sistemasciberfisicos/fabrica-data-lake-bronze-salvador/*"
+            Action:
+            - "s3:PutObject"
+            Effect: "Allow"
+          - Resource: "arn:aws:lambda:us-east-2:041517176862:function:Lambda_Silver_Processor"
+            Action:
+            - "lambda:InvokeFunction"
+            Effect: "Allow"
+        PolicyName: "IoTBroncePolicy"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "iot.amazonaws.com"
+  IAMRoleLambdaDataLakeRole:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      - "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+      - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+      MaxSessionDuration: 3600
+      RoleName: "Lambda-DataLake-Role"
+      Description: "Allows Lambda functions to call AWS services on your behalf."
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  LogsLogStream20260926LATESTdcd0756374044bb2b837e6fe24b2ac38:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/26/[$LATEST]dcd0756374044bb2b837e6fe24b2ac38"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20260913LATEST9604799a10be428fbe8ecc628bb17b8d:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]9604799a10be428fbe8ecc628bb17b8d"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator"
+  LogsLogStream20260913LATESTfcb73fbedd2941e690913a907e8ee1e6:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]fcb73fbedd2941e690913a907e8ee1e6"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20260918LATESTa35e0035243244c385eb3f8db947c4c0:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/18/[$LATEST]a35e0035243244c385eb3f8db947c4c0"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IAMManagedPolicyPolicyserviceroleAWSLambdaBasicExecutionRole26301fac182a443c921d9f30b4e2c640:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "AWSLambdaBasicExecutionRole-26301fac-182a-443c-921d-9f30b4e2c640"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:logs:us-east-2:041517176862:*"
+          Action: "logs:CreateLogGroup"
+          Effect: "Allow"
+        - Resource:
+          - "arn:aws:logs:us-east-2:041517176862:log-group:/aws/lambda/Lambda_Gold_Aggregator1:*"
+          Action:
+          - "logs:CreateLogStream"
+          - "logs:PutLogEvents"
+          Effect: "Allow"
+      Roles:
+      - "Lambda_Gold_Aggregator1-role-e4kc263x"
+      Users: []
+  LogsLogStream20260913LATESTd5e6cdf98c8c43cca8e1c30f1b1eacb1:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]d5e6cdf98c8c43cca8e1c30f1b1eacb1"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IAMRoleLambdaSilverProcessorrole470xxcc4:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::041517176862:policy/service-role/AWSLambdaBasicExecutionRole-d0530073-c922-44fb-b66b-80da773c7ade"
+      MaxSessionDuration: 3600
+      RoleName: "Lambda_Silver_Processor-role-470xxcc4"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  IoTCertificate:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IoT::Certificate"
+    DeletionPolicy: "Retain"
+    Properties:
+      Status: "ACTIVE"
+      CertificateMode: "DEFAULT"
+      CertificatePem: "-----BEGIN CERTIFICATE-----\nMIIDWTCCAkGgAwIBAgIUWZ4Bazr3PbJBqM52L4k3yYFb3JMwDQYJKoZIhvcNAQEL\n\
+        BQAwTTFLMEkGA1UECwxCQW1hem9uIFdlYiBTZXJ2aWNlcyBPPUFtYXpvbi5jb20g\nSW5jLiBMPVNlYXR0bGUgU1Q9V2FzaGluZ3RvbiBDPVVTMB4XDTI2MDkxMTIwMDM0\n\
+        MVoXDTQ5MTIzMTIzNTk1OVowHjEcMBoGA1UEAwwTQVdTIElvVCBDZXJ0aWZpY2F0\nZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMde9Eh+fIT7THpzIlrO\n\
+        OA/jiyHvYK/AxJoMmaviv7do53QiYBmeZgnY3IHkonIvmVojYh34mmNPX+Z0eJrv\n2/V4KD7cySK0VTOjp7E6xIO2XsAd8lgeoe8WNUerAla8qVJjXgDcq1pmR2IOPVE/\n\
+        flgkhaneDM5kex5Oe4oVtlcAfQUgEI2vRJlkkGQUlgY8fE9sxAH01MAAXe8SpKJ9\n/WSfHIzXMO4I6jc/I10z0TDo1Yetz3ok/Wh7lt2XgqTVyTZADnrugueCztboBgJm\n\
+        wGXg0KXLjZylZUepm8gyxAK4QWkuozVkwBUqIfV/Z0BdZoBY558ZFyVhTDKoajBB\nlZ8CAwEAAaNgMF4wHwYDVR0jBBgwFoAUJ78+c9KqIn9hqjJZWQkLJ00G9YcwHQYD\n\
+        VR0OBBYEFASxncKhIEY5pG57NXaQw2nd/49RMAwGA1UdEwEB/wQCMAAwDgYDVR0P\nAQH/BAQDAgeAMA0GCSqGSIb3DQEBCwUAA4IBAQB72PJ3WVjxD6pBW4+Ur5b/D30M\n\
+        6KB6dEN7bJ6b7sUNWpX+k2FbRPOvNRVu+EIwInFSoBNn1oA4nUcoCEKnl+qgCE4Z\nrQFbTrbvUG0MeAjbhbQtn5yM+h0BacA5kuJsmssoAlPPOU37trLKGPbYSzp2ptnF\n\
+        pwRQLttwHGWl5V0B6RhOQVrYfU41NrvOjf06WDKHeLonTCQ65iCoVE3bs7ibFaKn\nsBBokZX5pJ654XLGPGCe/TVdmmK4IDYhGBJi/22PEuzr7yjOCUxik9YGW4ZYLfFP\n\
+        k0peBP/PJOIGf+f9oCQKlXE6KcJW9BrQsC8IamTuqymxmKZhsRZBGkK3S5EC\n-----END CERTIFICATE-----\n"
+  IAMManagedPolicyPolicyserviceroleAmazonEventBridgeInvokeLambda1904209576:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "Amazon_EventBridge_Invoke_Lambda_1904209576"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource:
+          - "arn:aws:lambda:us-east-2:041517176862:function:Lambda_Gold_Aggregator"
+          Action:
+          - "lambda:InvokeFunction"
+          Effect: "Allow"
+      Roles:
+      - "Amazon_EventBridge_Invoke_Lambda_1904209576"
+      Users: []
+  IAMManagedPolicyPolicyserviceroleAmazonEventBridgeInvokeLambda1875100631:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "Amazon_EventBridge_Invoke_Lambda_1875100631"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource:
+          - "arn:aws:lambda:us-east-2:041517176862:function:Lambda_Gold_Aggregator1"
+          Action:
+          - "lambda:InvokeFunction"
+          Effect: "Allow"
+      Roles:
+      - "Amazon_EventBridge_Invoke_Lambda_1875100631"
+      Users: []
+  MqttLambdaRole:
+    Properties:
+      ManagedPolicyArns:
+      - Fn::Sub: "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+          Action: "sts:AssumeRole"
+      Policies:
+      - PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Resource:
+            - Fn::Sub: "arn:${AWS::Partition}:iot:${AWS::Region}:${AWS::AccountId}:topic/${ExistingTopic}"
+            Effect: "Allow"
+            Action:
+            - "iot:Publish"
+        PolicyName: "PublishConfiguredTopic"
+    Type: "AWS::IAM::Role"
+  LogsLogStream20260918LATEST392e3c9863ba4f9ab8debec37e43ee7b:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/18/[$LATEST]392e3c9863ba4f9ab8debec37e43ee7b"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20260913LATEST10469b0f4eea45d2acdfac5abcbf7e68:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]10469b0f4eea45d2acdfac5abcbf7e68"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20261020LATESTfbc20bdb16a1484899e71b0e51cece1d:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/20/[$LATEST]fbc20bdb16a1484899e71b0e51cece1d"
+      LogGroupName: "/aws/lambda/iot_paro_total"
+  LambdaVersionFunctionLambdaSilverProcessor2:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::Version"
+    DeletionPolicy: "Retain"
+    Properties:
+      FunctionName: "Lambda_Silver_Processor"
+      Description: ""
+      RuntimePolicy:
+        UpdateRuntimeOn: "Auto"
+      CodeSha256: "sNLgk+apJsQSpHIq7cz/91V8lDfcva05yZugHQVSRqA="
+  IAMManagedPolicyPolicyserviceroleAWSLambdaBasicExecutionRole4523964778e94149b5181e76dec4bc5f:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "AWSLambdaBasicExecutionRole-45239647-78e9-4149-b518-1e76dec4bc5f"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:logs:us-east-1:041517176862:*"
+          Action: "logs:CreateLogGroup"
+          Effect: "Allow"
+        - Resource:
+          - "arn:aws:logs:us-east-1:041517176862:log-group:/aws/lambda/myfunction:*"
+          Action:
+          - "logs:CreateLogStream"
+          - "logs:PutLogEvents"
+          Effect: "Allow"
+      Roles:
+      - "myfunction-role-t1sqforx"
+      Users: []
+  LambdaVersionFunctionLambdaSilverProcessor1:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::Version"
+    DeletionPolicy: "Retain"
+    Properties:
+      FunctionName: "Lambda_Silver_Processor"
+      Description: ""
+      RuntimePolicy:
+        UpdateRuntimeOn: "Auto"
+      CodeSha256: "R6fL2f5y9xHPTo4NojRtY2hz04DlAxWgwXm4xSMnwRQ="
+  EventsRuleRuleGeneradorCapaGoldSchedule:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Events::Rule"
+    DeletionPolicy: "Retain"
+    Properties:
+      EventBusName: "default"
+      ScheduleExpression: "rate(5 minutes)"
+      Description: ""
+      State: "DISABLED"
+      Targets:
+      - Id: "Idd2457f4b-6923-48de-8d54-04186849e4ae"
+        Arn: "arn:aws:lambda:us-east-2:041517176862:function:Lambda_Gold_Aggregator"
+        RetryPolicy:
+          MaximumEventAgeInSeconds: 900
+          MaximumRetryAttempts: 3
+        RoleArn: "arn:aws:iam::041517176862:role/service-role/Amazon_EventBridge_Invoke_Lambda_1904209576"
+      Id: "GeneradorCapaGoldSchedule"
+      Tags: []
+      Name: "GeneradorCapaGoldSchedule"
+  LambdaFunctionLambdaGoldAggregator:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::Function"
+    DeletionPolicy: "Retain"
+    Properties:
+      MemorySize: 128
+      Description: ""
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 30
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "lambda_function.lambda_handler"
+      Code:
+        SourceKMSKeyArn:
+          Ref: "LambdaFunctionLambdaGoldAggregatorCodeSourceKMSKeyArnqicOc"
+        S3ObjectVersion:
+          Ref: "LambdaFunctionLambdaGoldAggregatorCodeS3ObjectVersionsp2hR"
+        S3Bucket:
+          Ref: "LambdaFunctionLambdaGoldAggregatorCodeS3BucketeQFIb"
+        ZipFile:
+          Ref: "LambdaFunctionLambdaGoldAggregatorCodeZipFileNCKdq"
+        S3Key:
+          Ref: "LambdaFunctionLambdaGoldAggregatorCodeS3KeyjHwJj"
+        S3ObjectStorageMode:
+          Ref: "LambdaFunctionLambdaGoldAggregatorCodeS3ObjectStorageModeV1xKh"
+        ImageUri:
+          Ref: "LambdaFunctionLambdaGoldAggregatorCodeImageUri7Njny"
+      Role: "arn:aws:iam::041517176862:role/Lambda_Gold_Aggregator-role"
+      FileSystemConfigs: []
+      FunctionName: "Lambda_Gold_Aggregator"
+      Runtime: "python3.14"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: "/aws/lambda/Lambda_Gold_Aggregator"
+      RecursiveLoop: "Terminate"
+      EphemeralStorage:
+        Size: 512
+      Layers:
+      - "arn:aws:lambda:us-east-2:336392948345:layer:AWSSDKPandas-Python314:11"
+      Architectures:
+      - "x86_64"
+  LogsLogStream20261021LATESTe172c400828b4cf1b8788b0a2648acfc:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/21/[$LATEST]e172c400828b4cf1b8788b0a2648acfc"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  IoTLoggingRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: "Allow"
+          Principal:
+            Service: "iot.amazonaws.com"
+          Action: "sts:AssumeRole"
+      Policies:
+      - PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Resource:
+              Fn::Sub:
+              - "${BucketArn}/${Prefix}/*"
+              - BucketArn:
+                  Fn::Sub: "arn:${AWS::Partition}:s3:::${ExistingBucketName}"
+                Prefix:
+                  Ref: "ExistingPrefix"
+            Effect: "Allow"
+            Action:
+            - "s3:PutObject"
+        PolicyName: "WriteMqttLogs"
+    Type: "AWS::IAM::Role"
+  CloudFormationStackW9:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFormation::Stack"
+    DeletionPolicy: "Retain"
+    Properties:
+      Description: "Three manually invoked MQTT command Lambdas and S3 message logging.\n"
+      Parameters:
+        ExistingBucketName: "sistemasciberfisicos"
+        ThingName: "Sensor_sim"
+        ExistingPrefix: "fabrica-data-lake-gold-salvador/gold/Operational_actions"
+        IoTDataEndpoint: "a1w6y3r95yz410-ats.iot.us-east-2.amazonaws.com"
+        ExistingTopic: "fabrica/maquinas/telemetria"
+      Capabilities:
+      - "CAPABILITY_IAM"
+      EnableTerminationProtection: false
+      TemplateBody: "\nDescription: >\n  Three manually invoked MQTT command Lambdas\
+        \ and S3 message logging.\n\nParameters:\n  ExistingTopic:\n    Type: String\n\
+        \    Description: Existing MQTT topic name, without leading slash\n\n  ThingName:\n\
+        \    Type: String\n    Description: Existing AWS IoT Thing name\n\n  IoTDataEndpoint:\n\
+        \    Type: String\n    Description: >\n      IoT Data endpoint hostname, e.g.\n\
+        \      abc123-ats.iot.us-east-1.amazonaws.com\n  \n  ExistingBucketName:\n\
+        \    Type: String\n    Default: sistemasciberfisicos\n\n  ExistingPrefix:\n\
+        \    Type: String\n    Default: fabrica-data-lake-gold-salvador/gold/Operational_actions\n\
+        \nResources:\n\n  # IoT Core assumes this role to write messages to S3\n \
+        \ IoTLoggingRole:\n    Type: AWS::IAM::Role\n    Properties:\n      AssumeRolePolicyDocument:\n\
+        \        Version: '2012-10-17'\n        Statement:\n          - Effect: Allow\n\
+        \            Principal:\n              Service: iot.amazonaws.com\n      \
+        \      Action: sts:AssumeRole\n      Policies:\n        - PolicyName: WriteMqttLogs\n\
+        \          PolicyDocument:\n            Version: '2012-10-17'\n          \
+        \  Statement:\n              - Effect: Allow\n                Action:\n  \
+        \                - s3:PutObject\n                Resource: !Sub\n        \
+        \          - '${BucketArn}/${Prefix}/*'\n                  - BucketArn: !Sub\
+        \ 'arn:${AWS::Partition}:s3:::${ExistingBucketName}'\n                   \
+        \ Prefix: !Ref ExistingPrefix\n\n  # Every published message on the existing\
+        \ topic is logged\n  MqttLoggingRule:\n    Type: AWS::IoT::TopicRule\n   \
+        \ Properties:\n      RuleName: !Sub 'ManualMqttLogging_${AWS::StackName}'\n\
+        \      TopicRulePayload:\n        AwsIotSqlVersion: '2016-03-23'\n       \
+        \ Sql: !Sub \"SELECT *, topic() AS mqtt_topic, timestamp() AS received_at\
+        \ FROM '${ExistingTopic}'\"\n        RuleDisabled: false\n        Actions:\n\
+        \          - S3:\n              BucketName: !Ref ExistingBucketName\n    \
+        \          Key: !Sub '${ExistingPrefix}/\\${!timestamp()}-\\${!newuuid()}.json'\n\
+        \              RoleArn: !GetAtt IoTLoggingRole.Arn\n\n  # Shared least-privilege\
+        \ role for the three functions\n  MqttLambdaRole:\n    Type: AWS::IAM::Role\n\
+        \    Properties:\n      AssumeRolePolicyDocument:\n        Version: '2012-10-17'\n\
+        \        Statement:\n          - Effect: Allow\n            Principal:\n \
+        \             Service: lambda.amazonaws.com\n            Action: sts:AssumeRole\n\
+        \      ManagedPolicyArns:\n        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'\n\
+        \      Policies:\n        - PolicyName: PublishConfiguredTopic\n         \
+        \ PolicyDocument:\n            Version: '2012-10-17'\n            Statement:\n\
+        \              - Effect: Allow\n                Action:\n                \
+        \  - iot:Publish\n                Resource:\n                  - !Sub 'arn:${AWS::Partition}:iot:${AWS::Region}:${AWS::AccountId}:topic/${ExistingTopic}'\n\
+        \n  # Lambda 1: publish total-stop command\n  StopAllLambda:\n    Type: AWS::Lambda::Function\n\
+        \    Properties:\n      FunctionName: iot_paro_total\n      Runtime: python3.12\n\
+        \      Handler: index.handler\n      Timeout: 10\n      Role: !GetAtt MqttLambdaRole.Arn\n\
+        \      Environment:\n        Variables:\n          MQTT_TOPIC: !Ref ExistingTopic\n\
+        \          IOT_ENDPOINT: !Ref IoTDataEndpoint\n          THING_NAME: !Ref\
+        \ ThingName\n      Code:\n        ZipFile: |\n          import json\n    \
+        \      import os\n          import boto3\n          from datetime import datetime,\
+        \ timezone\n\n          def handler(event, context):\n              if event.get(\"\
+        confirm\") != \"STOP_ALL\":\n                  raise ValueError(\n       \
+        \               \"Explicit confirmation required: confirm=STOP_ALL\"\n   \
+        \               )\n\n              client = boto3.client(\n              \
+        \    \"iot-data\",\n                  endpoint_url=\"https://\" + os.environ[\"\
+        IOT_ENDPOINT\"]\n              )\n              payload = {\n            \
+        \      \"command_id\": context.aws_request_id,\n                  \"action\"\
+        : \"STOP_ALL\",\n                  \"thing\": os.environ[\"THING_NAME\"],\n\
+        \                  \"issued_at\": datetime.now(timezone.utc).isoformat(),\n\
+        \                  \"source\": \"manual-lambda\"\n              }\n      \
+        \        client.publish(\n                  topic=os.environ[\"MQTT_TOPIC\"\
+        ],\n                  qos=1,\n                  payload=json.dumps(payload)\n\
+        \              )\n              return {\"status\": \"published\", \"command\"\
+        : payload}\n\n  # Lambda 2: publish a single-device stop command\n  StopDeviceLambda:\n\
+        \    Type: AWS::Lambda::Function\n    Properties:\n      FunctionName: iot-paro-individual\n\
+        \      Runtime: python3.12\n      Handler: index.handler\n      Timeout: 10\n\
+        \      Role: !GetAtt MqttLambdaRole.Arn\n      Environment:\n        Variables:\n\
+        \          MQTT_TOPIC: !Ref ExistingTopic\n          IOT_ENDPOINT: !Ref IoTDataEndpoint\n\
+        \          THING_NAME: !Ref ThingName\n      Code:\n        ZipFile: |\n \
+        \         import json\n          import os\n          import boto3\n     \
+        \     from datetime import datetime, timezone\n\n          def handler(event,\
+        \ context):\n              device = event.get(\"device_id\")\n           \
+        \   if not device:\n                  raise ValueError(\"device_id is required\"\
+        )\n\n              if event.get(\"confirm\") != device:\n                \
+        \  raise ValueError(\n                      \"Confirmation must match device_id\"\
+        \n                  )\n\n              client = boto3.client(\n          \
+        \        \"iot-data\",\n                  endpoint_url=\"https://\" + os.environ[\"\
+        IOT_ENDPOINT\"]\n              )\n              payload = {\n            \
+        \      \"command_id\": context.aws_request_id,\n                  \"action\"\
+        : \"STOP_DEVICE\",\n                  \"device_id\": device,\n           \
+        \       \"thing\": os.environ[\"THING_NAME\"],\n                  \"issued_at\"\
+        : datetime.now(timezone.utc).isoformat(),\n                  \"source\": \"\
+        manual-lambda\"\n              }\n              client.publish(\n        \
+        \          topic=os.environ[\"MQTT_TOPIC\"],\n                  qos=1,\n \
+        \                 payload=json.dumps(payload)\n              )\n         \
+        \     return {\"status\": \"published\", \"command\": payload}\n\n  # Lambda\
+        \ 3: intentionally non-operational until action is defined\n  CustomActionLambda:\n\
+        \    Type: AWS::Lambda::Function\n    Properties:\n      FunctionName: iot-paro-accion_custom\n\
+        \      Runtime: python3.12\n      Handler: index.handler\n      Timeout: 10\n\
+        \      Role: !GetAtt MqttLambdaRole.Arn\n      Environment:\n        Variables:\n\
+        \          MQTT_TOPIC: !Ref ExistingTopic\n          IOT_ENDPOINT: !Ref IoTDataEndpoint\n\
+        \          THING_NAME: !Ref ThingName\n      Code:\n        ZipFile: |\n \
+        \         def handler(event, context):\n              raise NotImplementedError(\n\
+        \                  \"Define and validate the third action before deployment\
+        \ use\"\n              )\n\nOutputs:\n  StopAllFunction:\n    Value: !Ref\
+        \ StopAllLambda\n\n  StopDeviceFunction:\n    Value: !Ref StopDeviceLambda\n\
+        \n  CustomActionFunction:\n    Value: !Ref CustomActionLambda\n  \n  LogBucket:\n\
+        \    Value: !Ref ExistingBucketName\n\n  LogBucketPath:\n    Value: !Sub 's3://${ExistingBucketName}/${ExistingPrefix}/'\n\
+        \n  LoggingRule:\n    Value: !Ref MqttLoggingRule"
+      DisableRollback: false
+      StackName: "lambdas-test-iac3"
+  LogsLogStream20261021LATESTfd996860c3424710a571c633397de78e:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/21/[$LATEST]fd996860c3424710a571c633397de78e"
+      LogGroupName: "/aws/lambda/iot-paro-individual"
+  LogsLogStream20261020LATEST6de1a476e71846dfa7796bd98a64b94e:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/20/[$LATEST]6de1a476e71846dfa7796bd98a64b94e"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  S3BucketSistemasciberfisicos:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: "Retain"
+    Properties:
+      AbacStatus: "Disabled"
+      PublicAccessBlockConfiguration:
+        RestrictPublicBuckets: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        BlockPublicAcls: true
+      BucketName: "sistemasciberfisicos"
+      OwnershipControls:
+        Rules:
+        - ObjectOwnership: "BucketOwnerEnforced"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - BucketKeyEnabled: true
+          BlockedEncryptionTypes:
+            EncryptionType:
+            - "SSE-C"
+          ServerSideEncryptionByDefault:
+            SSEAlgorithm: "AES256"
+  LogsLogStream20261021LATESTf7abc5d9e5e74e9baa20974e859ca82a:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/10/21/[$LATEST]f7abc5d9e5e74e9baa20974e859ca82a"
+      LogGroupName: "/aws/lambda/Lambda_Silver_Processor"
+  LogsLogStream20260913LATEST130c7084d8d444fe8f2e17d53e7d8ae8:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/09/13/[$LATEST]130c7084d8d444fe8f2e17d53e7d8ae8"
+      LogGroupName: "/aws/lambda/Lambda_Gold_Aggregator"
