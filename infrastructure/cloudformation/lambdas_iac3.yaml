@@ -1,0 +1,226 @@
+
+Description: >
+  Three manually invoked MQTT command Lambdas and S3 message logging.
+
+Parameters:
+  ExistingTopic:
+    Type: String
+    Description: Existing MQTT topic name, without leading slash
+
+  ThingName:
+    Type: String
+    Description: Existing AWS IoT Thing name
+
+  IoTDataEndpoint:
+    Type: String
+    Description: >
+      IoT Data endpoint hostname, e.g.
+      abc123-ats.iot.us-east-1.amazonaws.com
+  
+  ExistingBucketName:
+    Type: String
+    Default: sistemasciberfisicos
+
+  ExistingPrefix:
+    Type: String
+    Default: fabrica-data-lake-gold-salvador/gold/Operational_actions
+
+Resources:
+
+  # IoT Core assumes this role to write messages to S3
+  IoTLoggingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: iot.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: WriteMqttLogs
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                Resource: !Sub
+                  - '${BucketArn}/${Prefix}/*'
+                  - BucketArn: !Sub 'arn:${AWS::Partition}:s3:::${ExistingBucketName}'
+                    Prefix: !Ref ExistingPrefix
+
+  # Every published message on the existing topic is logged
+  MqttLoggingRule:
+    Type: AWS::IoT::TopicRule
+    Properties:
+      RuleName: !Sub 'ManualMqttLogging_${AWS::StackName}'
+      TopicRulePayload:
+        AwsIotSqlVersion: '2016-03-23'
+        Sql: !Sub "SELECT *, topic() AS mqtt_topic, timestamp() AS received_at FROM '${ExistingTopic}'"
+        RuleDisabled: false
+        Actions:
+          - S3:
+              BucketName: !Ref ExistingBucketName
+              Key: !Sub '${ExistingPrefix}/\${!timestamp()}-\${!newuuid()}.json'
+              RoleArn: !GetAtt IoTLoggingRole.Arn
+
+  # Shared least-privilege role for the three functions
+  MqttLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: PublishConfiguredTopic
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - iot:Publish
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:iot:${AWS::Region}:${AWS::AccountId}:topic/${ExistingTopic}'
+
+  # Lambda 1: publish total-stop command
+  StopAllLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: iot_paro_total
+      Runtime: python3.12
+      Handler: index.handler
+      Timeout: 10
+      Role: !GetAtt MqttLambdaRole.Arn
+      Environment:
+        Variables:
+          MQTT_TOPIC: !Ref ExistingTopic
+          IOT_ENDPOINT: !Ref IoTDataEndpoint
+          THING_NAME: !Ref ThingName
+      Code:
+        ZipFile: |
+          import json
+          import os
+          import boto3
+          from datetime import datetime, timezone
+
+          def handler(event, context):
+              if event.get("confirm") != "STOP_ALL":
+                  raise ValueError(
+                      "Explicit confirmation required: confirm=STOP_ALL"
+                  )
+
+              client = boto3.client(
+                  "iot-data",
+                  endpoint_url="https://" + os.environ["IOT_ENDPOINT"]
+              )
+              payload = {
+                  "command_id": context.aws_request_id,
+                  "action": "STOP_ALL",
+                  "thing": os.environ["THING_NAME"],
+                  "issued_at": datetime.now(timezone.utc).isoformat(),
+                  "source": "manual-lambda"
+              }
+              client.publish(
+                  topic=os.environ["MQTT_TOPIC"],
+                  qos=1,
+                  payload=json.dumps(payload)
+              )
+              return {"status": "published", "command": payload}
+
+  # Lambda 2: publish a single-device stop command
+  StopDeviceLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: iot-paro-individual
+      Runtime: python3.12
+      Handler: index.handler
+      Timeout: 10
+      Role: !GetAtt MqttLambdaRole.Arn
+      Environment:
+        Variables:
+          MQTT_TOPIC: !Ref ExistingTopic
+          IOT_ENDPOINT: !Ref IoTDataEndpoint
+          THING_NAME: !Ref ThingName
+      Code:
+        ZipFile: |
+          import json
+          import os
+          import boto3
+          from datetime import datetime, timezone
+
+          def handler(event, context):
+              device = event.get("device_id")
+              if not device:
+                  raise ValueError("device_id is required")
+
+              if event.get("confirm") != device:
+                  raise ValueError(
+                      "Confirmation must match device_id"
+                  )
+
+              client = boto3.client(
+                  "iot-data",
+                  endpoint_url="https://" + os.environ["IOT_ENDPOINT"]
+              )
+              payload = {
+                  "command_id": context.aws_request_id,
+                  "action": "STOP_DEVICE",
+                  "device_id": device,
+                  "thing": os.environ["THING_NAME"],
+                  "issued_at": datetime.now(timezone.utc).isoformat(),
+                  "source": "manual-lambda"
+              }
+              client.publish(
+                  topic=os.environ["MQTT_TOPIC"],
+                  qos=1,
+                  payload=json.dumps(payload)
+              )
+              return {"status": "published", "command": payload}
+
+  # Lambda 3: intentionally non-operational until action is defined
+  CustomActionLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: iot-paro-accion_custom
+      Runtime: python3.12
+      Handler: index.handler
+      Timeout: 10
+      Role: !GetAtt MqttLambdaRole.Arn
+      Environment:
+        Variables:
+          MQTT_TOPIC: !Ref ExistingTopic
+          IOT_ENDPOINT: !Ref IoTDataEndpoint
+          THING_NAME: !Ref ThingName
+      Code:
+        ZipFile: |
+          def handler(event, context):
+              raise NotImplementedError(
+                  "Define and validate the third action before deployment use"
+              )
+
+Outputs:
+  StopAllFunction:
+    Value: !Ref StopAllLambda
+
+  StopDeviceFunction:
+    Value: !Ref StopDeviceLambda
+
+  CustomActionFunction:
+    Value: !Ref CustomActionLambda
+  
+  LogBucket:
+    Value: !Ref ExistingBucketName
+
+  LogBucketPath:
+    Value: !Sub 's3://${ExistingBucketName}/${ExistingPrefix}/'
+
+  LoggingRule:
+    Value: !Ref MqttLoggingRule
